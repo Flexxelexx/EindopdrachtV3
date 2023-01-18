@@ -3,18 +3,27 @@ package com.example.eindopdrachtbackendv1.DTOS;
 import com.example.eindopdrachtbackendv1.models.Upload;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 public class UploadDTO {
 
     public Long id;
+    @Min(value = 0)
+    @Max(value = 250)
     public double weightFish;
+
+    @Min(value = 0)
+    @Max(value = 100)
     public double lengthFish;
 
     public String charsFish;
+    @NotBlank
     public String speciesFish;
-    public String photoFish;
+
+    public byte[] photoFish;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@HH:mm", locale = "en_GB")
     public Date timeCaughtFish;
@@ -89,11 +98,11 @@ public class UploadDTO {
         this.speciesFish = speciesFish;
     }
 
-    public String getPhotoFish() {
+    public byte[] getPhotoFish() {
         return photoFish;
     }
 
-    public void setPhotoFish(String photoFish) {
+    public void setPhotoFish(byte[] photoFish) {
         this.photoFish = photoFish;
     }
 

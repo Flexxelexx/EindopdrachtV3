@@ -17,7 +17,6 @@ public class User {
     @Id
     @Column
     private String username;
-
     @Column
     @NotBlank
     @Size(min = 6)
@@ -28,16 +27,14 @@ public class User {
     @Column
     private LocalDate dob;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<FishingSpot> fishingSpots;
-
-    @OneToOne(fetch = FetchType.EAGER)
+    // relations
+    @OneToOne
     private Portfolio portfolios;
-
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    private Collection<Role> roles;
+    @OneToMany
+    private Collection<FishingSpot> fishingSpots;
+    @OneToMany
     private Collection<Upload> uploads;
 
 // eager??
@@ -104,6 +101,7 @@ public class User {
     public void setFishingSpots(Collection<FishingSpot> fishingSpots) {
         this.fishingSpots = fishingSpots;
     }
+// add fishingspot
 
     public Portfolio getPortfolios() {
         return portfolios;

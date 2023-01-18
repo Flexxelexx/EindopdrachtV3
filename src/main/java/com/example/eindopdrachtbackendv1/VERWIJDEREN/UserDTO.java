@@ -1,10 +1,6 @@
 package com.example.eindopdrachtbackendv1.DTOS;
 
 import com.example.eindopdrachtbackendv1.models.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import net.bytebuddy.utility.nullability.NeverNull;
-import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -26,11 +22,8 @@ public class UserDTO {
 
     public String[] roles;
 
-    @JsonIgnore
     public Collection<FishingSpot> fishingSpots;
-//    @JsonIgnoreProperties("users")
     public PortfolioDTO portfolios;
-    @JsonIgnore
     public Collection<Upload> uploads;
 
 

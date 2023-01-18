@@ -34,15 +34,15 @@ public class Upload {
     @OneToMany (fetch = FetchType.EAGER)
     private Collection <Rating> ratings;
 
-    @OneToMany (fetch = FetchType.EAGER)
-    private Collection <Portfolio> portfolios;
+    @ManyToOne (fetch = FetchType.EAGER)
+    private Portfolio portfolios;
 
 
     public Upload() {
 
     }
 
-    public Upload(Long id, double weightFish, double lengthFish, String charsFish, String speciesFish, String photoFish, Date timeCaughtFish, Collection<User> users, Collection<Rating> ratings, Collection<Portfolio> portfolios) {
+    public Upload(Long id, double weightFish, double lengthFish, String charsFish, String speciesFish, String photoFish, Date timeCaughtFish, Collection<User> users, Collection<Rating> ratings, Portfolio portfolios) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
@@ -127,11 +127,11 @@ public class Upload {
         this.ratings = ratings;
     }
 
-    public Collection<Portfolio> getPortfolios() {
+    public Portfolio getPortfolios() {
         return portfolios;
     }
 
-    public void setPortfolios(Collection<Portfolio> portfolios) {
+    public void setPortfolios(Portfolio portfolios) {
         this.portfolios = portfolios;
     }
 }

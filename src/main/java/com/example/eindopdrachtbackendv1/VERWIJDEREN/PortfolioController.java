@@ -53,13 +53,5 @@ public class PortfolioController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/updatecountfishes")
-    public ResponseEntity <PortfolioDTO> updateCountFishingSpot(@PathVariable Long id, @RequestBody PortfolioDTO dto) {
-
-            portfolioService.updateCountFishingspot(id, dto);
-
-            return ResponseEntity.noContent().build();
-
-    }
 
 }

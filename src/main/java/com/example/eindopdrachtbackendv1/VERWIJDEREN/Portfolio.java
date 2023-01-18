@@ -1,6 +1,7 @@
 package com.example.eindopdrachtbackendv1.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "portfolios")
@@ -8,22 +9,23 @@ public class Portfolio {
 
     @Id
     @GeneratedValue
-    @Column
     private Long portfolioID;
-    @Column
-    private double countFishingSpot;
 
-    @OneToOne(fetch = FetchType.EAGER)
+
+// relations
+    @OneToOne
     private User users;
+    @OneToMany
+    private List<Upload> uploads;
 
     public Portfolio() {
 
     }
 
-    public Portfolio(Long portfolioID, double countFishingSpot, User users) {
+    public Portfolio(Long portfolioID, User users, List<Upload> uploads) {
         this.portfolioID = portfolioID;
-        this.countFishingSpot = countFishingSpot;
         this.users = users;
+        this.uploads = uploads;
     }
 
     public Long getPortfolioID() {
@@ -34,19 +36,19 @@ public class Portfolio {
         this.portfolioID = portfolioID;
     }
 
-    public double getCountFishingSpot() {
-        return countFishingSpot;
-    }
-
-    public void setCountFishingSpot(double countFishingSpot) {
-        this.countFishingSpot = countFishingSpot;
-    }
-
     public User getUsers() {
         return users;
     }
 
     public void setUsers(User users) {
         this.users = users;
+    }
+
+    public List<Upload> getUploads() {
+        return uploads;
+    }
+
+    public void setUploads(List<Upload> uploads) {
+        this.uploads = uploads;
     }
 }

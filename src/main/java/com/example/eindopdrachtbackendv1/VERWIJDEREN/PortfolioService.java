@@ -31,7 +31,7 @@ public class PortfolioService {
     }
 
     public PortfolioDTO getPortfolio (Long id) {
-        PortfolioDTO dto = new PortfolioDTO();
+        PortfolioDTO dto;
         Optional<Portfolio> port = portfolioRepository.findById(id);
         if (port.isPresent()) {
             dto = PortfolioDTO.fromPortfolio(port.get());
@@ -53,16 +53,9 @@ public class PortfolioService {
     public void updatePortfolio (Long id, PortfolioDTO newPortfolio) {
         if (!portfolioRepository.existsById(id)) throw new RecordNotFoundException();
         Portfolio portfolio = portfolioRepository.findById(id).get();
-        portfolio.setCountFishingSpot(newPortfolio.getCountFishingSpot());
         portfolioRepository.save(portfolio);
     }
 
-    public void updateCountFishingspot (Long id, PortfolioDTO newPortfolio) {
-        if (!portfolioRepository.existsById(id)) throw new RecordNotFoundException();
-        Portfolio portfolio = portfolioRepository.findById(id).get();
-        portfolio.setCountFishingSpot(newPortfolio.getCountFishingSpot());
-        portfolioRepository.save(portfolio);
-    }
 }
 
 
