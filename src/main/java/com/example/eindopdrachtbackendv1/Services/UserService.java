@@ -28,10 +28,11 @@ public class UserService {
 
     private RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, UploadRepository uploadRepository, FishingSpotRepository fishingSpotRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, UploadRepository uploadRepository, FishingSpotRepository fishingSpotRepository, GearRepository gearRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.uploadRepository = uploadRepository;
         this.fishingSpotRepository = fishingSpotRepository;
+        this.gearRepository = gearRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
     }
@@ -151,6 +152,7 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
 
     public void deleteUser(Long username) {
         userRepository.deleteById(username);

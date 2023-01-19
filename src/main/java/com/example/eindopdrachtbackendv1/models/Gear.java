@@ -1,9 +1,8 @@
 package com.example.eindopdrachtbackendv1.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
+
 
 @Entity
 public class Gear {
@@ -24,16 +23,20 @@ public class Gear {
     @Column
     private double line;
 
+    @OneToMany
+    private Collection<User> users;
+
 
     public Gear() {
     }
 
-    public Gear(Long id, String rodLength, String kindOfReel, String lure, double line) {
+    public Gear(Long id, String rodLength, String kindOfReel, String lure, double line, Collection<User> users) {
         this.id = id;
         this.rodLength = rodLength;
         this.kindOfReel = kindOfReel;
         this.lure = lure;
         this.line = line;
+        this.users = users;
     }
 
     public Long getId() {
@@ -76,4 +79,11 @@ public class Gear {
         this.line = line;
     }
 
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
+    }
 }

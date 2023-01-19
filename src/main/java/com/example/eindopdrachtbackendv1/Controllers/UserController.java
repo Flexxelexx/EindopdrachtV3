@@ -4,13 +4,14 @@ import com.example.eindopdrachtbackendv1.DTOS.Input.UserInputDto;
 import com.example.eindopdrachtbackendv1.DTOS.Output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.Repositories.RoleRepository;
 import com.example.eindopdrachtbackendv1.Services.UserService;
+import com.example.eindopdrachtbackendv1.models.Rating;
 import com.example.eindopdrachtbackendv1.models.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<UserOutputDto> updateUser (@Valid @RequestBody UserInputDto userInput) {
+    public ResponseEntity<UserOutputDto> updateUser(@Valid @RequestBody UserInputDto userInput) {
 
         UserOutputDto user = userService.updateUser(userInput);
 
@@ -69,8 +70,8 @@ public class UserController {
         return ResponseEntity.created(uri).body(user);
     }
 
-    @PutMapping(value = "/{id}/upload/{uploadid}")
-    public ResponseEntity<Object> addUpload (@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadid) {
+    @PostMapping(value = "/{id}/upload/{uploadid}")
+    public ResponseEntity<Object> addUpload(@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadid) {
 
         userService.addUpload(uploadid, id);
 
@@ -78,13 +79,22 @@ public class UserController {
     }
 
 
-    @PutMapping(value = "/{id}/addfishingspot/{fishingspotid}")
-    public ResponseEntity<Object> addFishingspot (@PathVariable("id") Long id, @PathVariable("fishingspotid") String fishingspotid) {
+    @PostMapping(value = "/{id}/addfishingspot/{fishingspotid}")
+    public ResponseEntity<Object> addFishingspot(@PathVariable("id") Long id, @PathVariable("fishingspotid") String fishingspotid) {
 
         userService.addFishingspot(fishingspotid, id);
 
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping(value = "/{id}/addgear/{gearid}")
+    public ResponseEntity<Object> addGear(@PathVariable("id") Long id, @PathVariable("gearid") Long gearid) {
+
+        userService.addGear(gearid, id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     @DeleteMapping(value = "/{id}/deleteuser")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") Long username) {

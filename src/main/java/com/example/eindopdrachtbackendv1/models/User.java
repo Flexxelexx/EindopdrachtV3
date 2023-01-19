@@ -37,14 +37,14 @@ public class User {
     @OneToMany
     private List<Upload> uploads;
 
-    @OneToOne
-    private Gear gears;
+    @OneToMany
+    private List<Gear> gears;
 
     public User() {
 
     }
 
-    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, Gear gears) {
+    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -118,6 +118,14 @@ public class User {
 
     public void setUploads(List<Upload> uploads) {
         this.uploads = uploads;
+    }
+
+    public List<Gear> getGears() {
+        return gears;
+    }
+
+    public void setGears(List<Gear> gears) {
+        this.gears = gears;
     }
 
     public void addFishingSpot(FishingSpot fishingSpot) {

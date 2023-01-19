@@ -13,26 +13,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.eindopdrachtbackendv1.models.Rating.*;
+import static com.example.eindopdrachtbackendv1.models.Rating.ZEROSTARS;
+
 @Service
 public class UploadService {
 
     private final UploadRepository uploadRepository;
 
-    public UploadService (UploadRepository uploadRepository) {
+
+    public UploadService(UploadRepository uploadRepository) {
         this.uploadRepository = uploadRepository;
     }
 
     public List<UploadOutputDto> getUploads() {
-        List <UploadOutputDto> collection = new ArrayList<>();
-        List <Upload> list = uploadRepository.findAll();
-        for (Upload upload : list ) {
+        List<UploadOutputDto> collection = new ArrayList<>();
+        List<Upload> list = uploadRepository.findAll();
+        for (Upload upload : list) {
             collection.add(uploadToUploadOutputDto(upload));
         }
 
         return collection;
     }
 
-    public UploadOutputDto getUpload (Long id) {
+    public UploadOutputDto getUpload(Long id) {
         UploadOutputDto dto;
         Optional<Upload> uploadOptional = uploadRepository.findById(id);
         if (uploadOptional.isPresent()) {
@@ -43,12 +47,12 @@ public class UploadService {
         return dto;
     }
 
-    public Long createUpload (UploadInputDto uploadDTO) {
+    public Long createUpload(UploadInputDto uploadDTO) {
         Upload newUpload = uploadRepository.save(uploadInputDtoToUpload(uploadDTO));
         return newUpload.getId();
     }
 
-    private UploadOutputDto uploadToUploadOutputDto (Upload upload) {
+    private UploadOutputDto uploadToUploadOutputDto(Upload upload) {
 
         UploadOutputDto uploadOutputDto = new UploadOutputDto();
 
@@ -59,10 +63,12 @@ public class UploadService {
         uploadOutputDto.setSpeciesFish(upload.getSpeciesFish());
         uploadOutputDto.setPhotoFish(upload.getPhotoFish());
 
+        uploadOutputDto.setRating(upload.getRating());
+
         return uploadOutputDto;
     }
 
-    private Upload uploadInputDtoToUpload (UploadInputDto uploadInputDto) {
+    private Upload uploadInputDtoToUpload(UploadInputDto uploadInputDto) {
 
 
         Upload upload = new Upload();
@@ -77,7 +83,8 @@ public class UploadService {
         upload.setRating(Rating.ZEROSTARS);
         return upload;
     }
-    public UploadOutputDto updateUpload (UploadInputDto uploadInput) {
+
+    public UploadOutputDto updateUpload(UploadInputDto uploadInput) {
 
         Long inputId = uploadInput.getId();
 
@@ -90,7 +97,33 @@ public class UploadService {
     }
 
 
-    public void deleteUpload (Long id) {
+    public void addRating(Integer uploadRating, Long uploadId) {
+        Rating ratingEnum;
+        switch (uploadRating) {
+            case 1:
+                ratingEnum = ONESTAR;
+                break;
+            case 2:
+                ratingEnum = TWOSTARS;
+                break;
+            case 3:
+                ratingEnum = THREESTARS;
+                break;
+            case 4:
+                ratingEnum = FOURSTARS;
+                break;
+            case 5:
+                ratingEnum = FIVESTARS;
+                break;
+            default:
+                ratingEnum = ZEROSTARS;
+        }
+        Upload upload = uploadRepository.findById(uploadId).get();
+        upload.setRating(ratingEnum);
+        uploadRepository.save(upload);
+    }
+
+    public void deleteUpload(Long id) {
         uploadRepository.deleteById(id);
     }
 

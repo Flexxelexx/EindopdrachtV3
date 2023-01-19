@@ -46,6 +46,14 @@ public class UploadController {
         return ResponseEntity.created(location).build();
     }
 
+    @PostMapping("/rating/{uploadId}")
+    public ResponseEntity<String> addRating(@PathVariable Long uploadId, @RequestBody Integer rating) {
+
+        uploadService.addRating(rating, uploadId);
+        return ResponseEntity.ok("Rating has been given!");
+
+    }
+
     @PutMapping
     public ResponseEntity<UploadOutputDto> updateUpload(@Valid @RequestBody UploadInputDto uploadInput) {
 
@@ -57,6 +65,7 @@ public class UploadController {
         return ResponseEntity.created(uri).body(upload);
 
     }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteUpload (@PathVariable Long id) {

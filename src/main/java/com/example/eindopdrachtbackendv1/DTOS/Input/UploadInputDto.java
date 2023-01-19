@@ -1,6 +1,5 @@
 package com.example.eindopdrachtbackendv1.DTOS.Input;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -28,5 +27,4 @@ public class UploadInputDto {
     private String speciesFish;
 
     private byte[] photoFish;
-
 }
