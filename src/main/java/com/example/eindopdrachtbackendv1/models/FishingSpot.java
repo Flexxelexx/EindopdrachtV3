@@ -7,30 +7,40 @@ import java.util.Collection;
 @Table(name = "fishingspots")
 public class FishingSpot {
     @Id
+    @GeneratedValue
+    private Long id;
     @Column
     private String spotLocation;
-
+    @Column
     private String city;
-
+    @Column
     private String region;
-
-    private String accessibility;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<User> users;
 
 
+
+
     public FishingSpot() {
 
     }
 
-    public FishingSpot(String spotLocation, String city, String region, String accessibility, Collection<User> users) {
+    public FishingSpot(Long id, String spotLocation, String city, String region, Collection<User> users) {
+        this.id = id;
         this.spotLocation = spotLocation;
         this.city = city;
         this.region = region;
-        this.accessibility = accessibility;
         this.users = users;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSpotLocation() {
@@ -55,14 +65,6 @@ public class FishingSpot {
 
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    public String getAccessibility() {
-        return accessibility;
-    }
-
-    public void setAccessibility(String accessibility) {
-        this.accessibility = accessibility;
     }
 
     public Collection<User> getUsers() {

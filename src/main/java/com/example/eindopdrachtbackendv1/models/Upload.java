@@ -1,12 +1,8 @@
 package com.example.eindopdrachtbackendv1.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
-
-
 import java.util.Collection;
-import java.util.Date;
+
 
 @Entity
 public class Upload {
@@ -23,36 +19,29 @@ public class Upload {
     @Column
     private String speciesFish;
     @Column
-    private String photoFish;
-    @Column
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@mm:ss")
-    private Date timeCaughtFish;
+    @Lob
+    private byte[] photoFish;
 
-    @OneToMany (fetch = FetchType.EAGER)
-    private Collection <User> users;
 
-    @OneToMany (fetch = FetchType.EAGER)
-    private Collection <Rating> ratings;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Collection<User> users;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    private Portfolio portfolios;
+    private Rating rating;
 
 
     public Upload() {
 
     }
 
-    public Upload(Long id, double weightFish, double lengthFish, String charsFish, String speciesFish, String photoFish, Date timeCaughtFish, Collection<User> users, Collection<Rating> ratings, Portfolio portfolios) {
+    public Upload(Long id, double weightFish, double lengthFish, String charsFish, String speciesFish, byte[] photoFish, Collection<User> users, Rating rating) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
         this.charsFish = charsFish;
         this.speciesFish = speciesFish;
         this.photoFish = photoFish;
-        this.timeCaughtFish = timeCaughtFish;
         this.users = users;
-        this.ratings = ratings;
-        this.portfolios = portfolios;
+        this.rating = rating;
     }
 
     public Long getId() {
@@ -95,20 +84,12 @@ public class Upload {
         this.speciesFish = speciesFish;
     }
 
-    public String getPhotoFish() {
+    public byte[] getPhotoFish() {
         return photoFish;
     }
 
-    public void setPhotoFish(String photoFish) {
+    public void setPhotoFish(byte[] photoFish) {
         this.photoFish = photoFish;
-    }
-
-    public Date getTimeCaughtFish() {
-        return new Date();
-    }
-
-    public void setTimeCaughtFish(Date timeCaughtFish) {
-        this.timeCaughtFish = timeCaughtFish;
     }
 
     public Collection<User> getUsers() {
@@ -119,19 +100,12 @@ public class Upload {
         this.users = users;
     }
 
-    public Collection<Rating> getRatings() {
-        return ratings;
+
+    public Rating getRating() {
+        return rating;
     }
 
-    public void setRatings(Collection<Rating> ratings) {
-        this.ratings = ratings;
-    }
-
-    public Portfolio getPortfolios() {
-        return portfolios;
-    }
-
-    public void setPortfolios(Portfolio portfolios) {
-        this.portfolios = portfolios;
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 }

@@ -1,12 +1,13 @@
 package com.example.eindopdrachtbackendv1.Controllers;
 
-import com.example.eindopdrachtbackendv1.DTOS.FishingSpotDTO;
+import com.example.eindopdrachtbackendv1.DTOS.Input.FishingspotInputDto;
+import com.example.eindopdrachtbackendv1.DTOS.Output.FishingspotOutputDto;
 import com.example.eindopdrachtbackendv1.Services.FishingSpotService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -14,27 +15,30 @@ import java.util.List;
 @RequestMapping(value = "/fishingspots")
 public class FishingSpotController {
 
-   @Autowired
     private FishingSpotService fishingSpotService;
 
-   @GetMapping(value = "")
-    public ResponseEntity<List<FishingSpotDTO>> getFisingSpots() {
+    public FishingSpotController(FishingSpotService fishingSpotService) {
+        this.fishingSpotService = fishingSpotService;
+    }
 
-       List<FishingSpotDTO> fishingSpotDTOS = fishingSpotService.getFishingSpots();
+    @GetMapping
+    public ResponseEntity<List<FishingspotOutputDto>> getFisingSpots() {
+
+       List<FishingspotOutputDto> fishingSpotDTOS = fishingSpotService.getFishingSpots();
 
        return ResponseEntity.ok().body(fishingSpotDTOS);
    }
 
    @GetMapping(value = "/{fishingspot}")
-    public ResponseEntity<FishingSpotDTO> getFishingSpot(@PathVariable("fishingspot") String spotLocation) {
+    public ResponseEntity<FishingspotOutputDto> getFishingSpot(@PathVariable("fishingspot") String spotLocation) {
 
-       FishingSpotDTO optionalFishingSpot = fishingSpotService.getFishingSpot(spotLocation);
+       FishingspotOutputDto optionalFishingSpot = fishingSpotService.getFishingSpot(spotLocation);
 
        return ResponseEntity.ok().body(optionalFishingSpot);
    }
 
    @PostMapping(value = "/create")
-    public ResponseEntity<FishingSpotDTO> createFishingSpot(@RequestBody FishingSpotDTO id) {
+    public ResponseEntity<FishingspotInputDto> createFishingSpot(@RequestBody FishingspotInputDto id) {
 
        String newFishingspot = fishingSpotService.createFishingSpot(id);
 
@@ -44,12 +48,15 @@ public class FishingSpotController {
        return ResponseEntity.created(location).build();
    }
 
-   @PostMapping(value = "/{id}/updatelocation")
-    public ResponseEntity<FishingSpotDTO> updateSpotLocation (@PathVariable String spotLocation, @RequestBody FishingSpotDTO dto) {
+   @PostMapping
+    public ResponseEntity<FishingspotOutputDto> updateFishingspot (@Valid @RequestBody FishingspotInputDto userInput) {
 
-       fishingSpotService.updateSpotLocation(spotLocation, dto);
+       FishingspotOutputDto fishingspot = fishingSpotService.updateFishingspot(userInput);
 
-       return ResponseEntity.noContent().build();
+       URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+               .buildAndExpand(fishingspot).toUri();
+
+       return ResponseEntity.created(uri).body(fishingspot);
 
    }
 

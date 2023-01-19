@@ -1,10 +1,10 @@
 package com.example.eindopdrachtbackendv1.Services;
 
-import com.example.eindopdrachtbackendv1.DTOS.FishingSpotDTO;
+import com.example.eindopdrachtbackendv1.DTOS.Input.FishingspotInputDto;
+import com.example.eindopdrachtbackendv1.DTOS.Output.FishingspotOutputDto;
 import com.example.eindopdrachtbackendv1.Exceptions.RecordNotFoundException;
 import com.example.eindopdrachtbackendv1.Repositories.FishingSpotRepository;
 import com.example.eindopdrachtbackendv1.models.FishingSpot;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,48 +14,85 @@ import java.util.Optional;
 @Service
 public class FishingSpotService {
 
-    @Autowired
     private final FishingSpotRepository fishingSpotRepository;
 
     public FishingSpotService(FishingSpotRepository fishingSpotRepository) {
         this.fishingSpotRepository = fishingSpotRepository;
     }
 
-    public List<FishingSpotDTO> getFishingSpots() {
-        List<FishingSpotDTO> collection = new ArrayList<>();
+    public List<FishingspotOutputDto> getFishingSpots() {
+        List<FishingspotOutputDto> collection = new ArrayList<>();
         List<FishingSpot> list = fishingSpotRepository.findAll();
         for (FishingSpot fishingSpot : list) {
-            collection.add(FishingSpotDTO.fromFishingSpot(fishingSpot));
+            collection.add(fishingspotToFishingspotOutputDto(fishingSpot));
         }
 
         return collection;
     }
 
-    public FishingSpotDTO getFishingSpot(String spotLocation) {
-        FishingSpotDTO dto = new FishingSpotDTO();
-        Optional<FishingSpot> user = fishingSpotRepository.findById(spotLocation);
+    public FishingspotOutputDto getFishingSpot(String spotLocation) {
+        FishingspotOutputDto dto;
+        Optional<FishingSpot> user = fishingSpotRepository.findBySpotLocation(spotLocation);
         if (user.isPresent()) {
-            dto = FishingSpotDTO.fromFishingSpot(user.get());
+            dto = fishingspotToFishingspotOutputDto(user.get());
         } else {
             throw new RecordNotFoundException(spotLocation);
         }
         return dto;
     }
 
-    public String createFishingSpot(FishingSpotDTO fishingSpotDTO) {
-        FishingSpot newFishingSpot = fishingSpotRepository.save(FishingSpotDTO.toFishingspot(fishingSpotDTO));
-        return newFishingSpot.getSpotLocation();
+    public String createFishingSpot(FishingspotInputDto fishingSpotDTO) {
+        if (!fishingSpotRepository.existsBySpotLocation(fishingSpotDTO.getSpotLocation())) {
+
+            FishingSpot newFishingSpot = fishingSpotRepository.save(fishingSpotInputDtoToFishingspot(fishingSpotDTO));
+
+            return newFishingSpot.getSpotLocation();
+        } else {
+            throw new RecordNotFoundException(String.format("Fishingspot already exists!"));
+        }
+    }
+
+    private FishingspotOutputDto fishingspotToFishingspotOutputDto(FishingSpot fishingSpot) {
+
+        FishingspotOutputDto fishingspotOutputDto = new FishingspotOutputDto();
+
+        fishingspotOutputDto.setId(fishingSpot.getId());
+        fishingspotOutputDto.setSpotLocation(fishingSpot.getSpotLocation());
+        fishingspotOutputDto.setCity(fishingSpot.getCity());
+        fishingspotOutputDto.setRegion(fishingSpot.getRegion());
+
+        return fishingspotOutputDto;
+    }
+
+    private FishingSpot fishingSpotInputDtoToFishingspot (FishingspotInputDto fishingspotInputDto) {
+
+        FishingSpot fishingSpot = new FishingSpot();
+
+        fishingSpot.setId(fishingspotInputDto.getId());
+        fishingSpot.setSpotLocation(fishingspotInputDto.getSpotLocation());
+        fishingSpot.setCity(fishingspotInputDto.getCity());
+        fishingSpot.setRegion(fishingspotInputDto.getRegion());
+
+        return fishingSpot;
+    }
+
+
+    public FishingspotOutputDto updateFishingspot (FishingspotInputDto userInput) {
+
+        Long inputId = userInput.getId();
+
+        FishingSpot fishingSpot = fishingSpotRepository.findById(inputId).map(x -> fishingSpotInputDtoToFishingspot(userInput))
+                .orElseThrow(() -> new RecordNotFoundException(String.format("Fishingspot with id %d not found", inputId)));
+
+        fishingSpotRepository.save(fishingSpot);
+
+        return fishingspotToFishingspotOutputDto(fishingSpot);
     }
 
     public void deleteFishingSpot(String spotLocation) {
-        fishingSpotRepository.deleteById(spotLocation);
+        fishingSpotRepository.deleteBySpotLocation(spotLocation);
     }
 
-    public void updateSpotLocation(String spotLocation, FishingSpotDTO newFishingSpot) {
-        FishingSpot fishingSpot = fishingSpotRepository.findById(spotLocation).get();
-        fishingSpot.setSpotLocation(newFishingSpot.getSpotLocation());
-        fishingSpotRepository.save(fishingSpot);
-    }
 
 
 

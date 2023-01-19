@@ -6,7 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -15,6 +16,8 @@ public class User {
 
 
     @Id
+    @GeneratedValue
+    private Long id;
     @Column
     private String username;
     @Column
@@ -27,31 +30,38 @@ public class User {
     @Column
     private LocalDate dob;
 
-    // relations
-    @OneToOne
-    private Portfolio portfolios;
     @ManyToMany
-    private Collection<Role> roles;
+    private Set<Role> roles;
+    @ManyToMany
+    private List<FishingSpot> fishingSpots;
     @OneToMany
-    private Collection<FishingSpot> fishingSpots;
-    @OneToMany
-    private Collection<Upload> uploads;
+    private List<Upload> uploads;
 
-// eager??
+    @OneToOne
+    private Gear gears;
 
     public User() {
 
     }
 
-    public User(String username, String password, String email, LocalDate dob, Collection<Role> roles, Collection<FishingSpot> fishingSpots, Portfolio portfolios, Collection<Upload> uploads) {
+    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, Gear gears) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.dob = dob;
         this.roles = roles;
         this.fishingSpots = fishingSpots;
-        this.portfolios = portfolios;
         this.uploads = uploads;
+        this.gears = gears;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -86,36 +96,40 @@ public class User {
         this.dob = dob;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public Collection<FishingSpot> getFishingSpots() {
+    public List<FishingSpot> getFishingSpots() {
         return fishingSpots;
     }
 
-    public void setFishingSpots(Collection<FishingSpot> fishingSpots) {
+    public void setFishingSpots(List<FishingSpot> fishingSpots) {
         this.fishingSpots = fishingSpots;
     }
-// add fishingspot
 
-    public Portfolio getPortfolios() {
-        return portfolios;
-    }
-
-    public void setPortfolios(Portfolio portfolios) {
-        this.portfolios = portfolios;
-    }
-
-    public Collection<Upload> getUploads() {
+    public List<Upload> getUploads() {
         return uploads;
     }
 
-    public void setUploads(Collection<Upload> uploads) {
+    public void setUploads(List<Upload> uploads) {
         this.uploads = uploads;
     }
+
+    public void addFishingSpot(FishingSpot fishingSpot) {
+        fishingSpots.add(fishingSpot);
+    }
+
+    public void addUpload(Upload upload) {
+        uploads.add(upload);
+    }
+
+    public void addGear(Gear gear) {
+        gears.add(gear);
+    }
+
 }

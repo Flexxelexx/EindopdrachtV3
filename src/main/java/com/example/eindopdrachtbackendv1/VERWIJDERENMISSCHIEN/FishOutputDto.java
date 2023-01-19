@@ -1,4 +1,4 @@
-package com.example.eindopdrachtbackendv1.DTOS.Output;
+package com.example.eindopdrachtbackendv1.VERWIJDERENMISSCHIEN;
 
 
 import lombok.Data;

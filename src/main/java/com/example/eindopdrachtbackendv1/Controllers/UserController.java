@@ -1,108 +1,93 @@
 package com.example.eindopdrachtbackendv1.Controllers;
 
-import com.example.eindopdrachtbackendv1.DTOS.UserDTO;
+import com.example.eindopdrachtbackendv1.DTOS.Input.UserInputDto;
+import com.example.eindopdrachtbackendv1.DTOS.Output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.Repositories.RoleRepository;
-import com.example.eindopdrachtbackendv1.Repositories.UserRepository;
 import com.example.eindopdrachtbackendv1.Services.UserService;
-import com.example.eindopdrachtbackendv1.models.Role;
 import com.example.eindopdrachtbackendv1.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder encoder;
 
-    public UserController(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService, RoleRepository roleRepository, PasswordEncoder encoder) {
+        this.userService = userService;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
     }
 
-    @GetMapping(value = "")
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    @GetMapping
+    public ResponseEntity<List<UserOutputDto>> getUsers() {
 
-        List<UserDTO> userDtos = userService.getUsers();
+        List<UserOutputDto> userDtos = userService.getUsers();
 
         return ResponseEntity.ok().body(userDtos);
     }
 
     @GetMapping(value = "/{username}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
+    public ResponseEntity<UserOutputDto> getUser(@PathVariable("username") String username) {
 
-        UserDTO optionalUser = userService.getUser(username);
+        UserOutputDto optionalUser = userService.getUser(username);
 
         return ResponseEntity.ok().body(optionalUser);
     }
 
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) {
-            User newUser = new User();
-            newUser.setUsername(userDTO.username);
-            newUser.setPassword(encoder.encode(userDTO.password));
-            newUser.setEmail(userDTO.email);
-            newUser.setDob(userDTO.dob);
+    @PostMapping
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserInputDto userDTO) {
 
-            List<Role> userRoles = new ArrayList<>();
-            for (String rolename : userDTO.roles) {
-                Optional<Role> or = roleRepository.findById(rolename);
+        User user = userService.createUser(userDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(user.getUsername()).toUri();
+        return ResponseEntity.created(location).build();
 
-                userRoles.add(or.get());
-            }
-            newUser.setRoles(userRoles);
+    }
 
-            userRepository.save(newUser);
+    @PutMapping(value = "")
+    public ResponseEntity<UserOutputDto> updateUser (@Valid @RequestBody UserInputDto userInput) {
 
-            return ResponseEntity.ok()
-                    .body(newUser);
-        }
+        UserOutputDto user = userService.updateUser(userInput);
 
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .buildAndExpand(user).toUri();
 
-    @PutMapping(value = "/{id}/updatepassword")
-    public ResponseEntity<UserDTO> updatePassword(@PathVariable("id") String username, @RequestBody UserDTO dto) {
+        return ResponseEntity.created(uri).body(user);
+    }
 
-        dto.setPassword(encoder.encode(dto.password));
-        userService.updatePassword(username, dto);
+    @PutMapping(value = "/{id}/upload/{uploadid}")
+    public ResponseEntity<Object> addUpload (@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadid) {
+
+        userService.addUpload(uploadid, id);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}/updateemail")
-    public ResponseEntity<UserDTO> updateEmail(@PathVariable("id") String username, @RequestBody UserDTO dto) {
 
-        userService.updateEmail(username, dto);
+    @PutMapping(value = "/{id}/addfishingspot/{fishingspotid}")
+    public ResponseEntity<Object> addFishingspot (@PathVariable("id") Long id, @PathVariable("fishingspotid") String fishingspotid) {
 
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping(value = "/{id}/updatedob")
-    public ResponseEntity<UserDTO> updateDob(@PathVariable("id") String username, @RequestBody UserDTO dto) {
-
-        userService.updateDob(username, dto);
+        userService.addFishingspot(fishingspotid, id);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{id}/deleteuser")
-    public ResponseEntity<Object> deleteUser(@PathVariable("id") String username) {
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") Long username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
