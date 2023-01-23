@@ -40,11 +40,14 @@ public class User {
     @OneToMany
     private List<Gear> gears;
 
+    @OneToMany
+    private List<Location> locations;
+
     public User() {
 
     }
 
-    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears) {
+    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,6 +57,7 @@ public class User {
         this.fishingSpots = fishingSpots;
         this.uploads = uploads;
         this.gears = gears;
+        this.locations = locations;
     }
 
     public Long getId() {
@@ -140,4 +144,11 @@ public class User {
         gears.add(gear);
     }
 
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
 }
