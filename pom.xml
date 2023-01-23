@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>eindopdrachtBackendv1</artifactId>
 	<version>0.0.1</version>
-	<name>eindopdrachtBackendv1</name>
+	<name>eindopdrachtBackendv2</name>
 	<description>First draft of FISHiT</description>
 	<properties>
 		<java.version>17</java.version>

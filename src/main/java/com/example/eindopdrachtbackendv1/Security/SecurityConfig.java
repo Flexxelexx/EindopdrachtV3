@@ -50,53 +50,53 @@ public class SecurityConfig  {
                 .httpBasic().disable()
                 .authorizeRequests()
 
+                .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth").permitAll()
+                .antMatchers(HttpMethod.PUT, "/auth").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/users").permitAll()
                 .antMatchers(HttpMethod.PUT,"/users").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/users").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/upload").permitAll()
                 .antMatchers(HttpMethod.GET, "/upload").permitAll()
                 .antMatchers(HttpMethod.PUT,"/upload").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/upload").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/upload").permitAll()
-
-                .antMatchers(HttpMethod.POST, "/portfolio").permitAll()
-                .antMatchers(HttpMethod.GET, "/portfolio").permitAll()
-                .antMatchers(HttpMethod.PUT,"/portfolio").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/portfolio").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/portfolio").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/fishingspot").permitAll()
                 .antMatchers(HttpMethod.GET, "/fishingspot").permitAll()
                 .antMatchers(HttpMethod.PUT,"/fishingspot").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/fishingspot").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/fishingspot").permitAll()
-
-                .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/users").permitAll()
-                .antMatchers(HttpMethod.PUT,"/users").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/users").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/users").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/rating").permitAll()
                 .antMatchers(HttpMethod.GET, "/rating").permitAll()
                 .antMatchers(HttpMethod.PUT,"/rating").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/rating").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/rating").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/gear").permitAll()
+                .antMatchers(HttpMethod.GET, "/gear").permitAll()
+                .antMatchers(HttpMethod.PUT,"/gear").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/gear").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/location").permitAll()
+                .antMatchers(HttpMethod.GET, "/location").permitAll()
+                .antMatchers(HttpMethod.PUT,"/location").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/location").permitAll()
+
+
 
                 .antMatchers("/admin").hasAuthority("ADMIN")
-                .antMatchers("/roles").hasAuthority("ADMIN")
+                .antMatchers("/secret").hasAuthority("ADMIN")
 
-                .antMatchers("/secret").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/secret").hasAnyAuthority("ADMIN")
                 .antMatchers("/users").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/rating").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/portfolio").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/fishingspot").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/upload").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/fishingspot").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/rating").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/gear").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/location").hasAnyAuthority("USER", "ADMIN")
+
 
                 .and()
                 .addFilterBefore(new JwtRequestFilter(jwtService, userDetailsService()), UsernamePasswordAuthenticationFilter.class)

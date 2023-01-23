@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 
@@ -21,6 +22,8 @@ public class UserService {
     private UploadRepository uploadRepository;
 
     private FishingSpotRepository fishingSpotRepository;
+
+    private LocationRepository locationRepository;
 
     private GearRepository gearRepository;
 
@@ -153,8 +156,19 @@ public class UserService {
         }
     }
 
+    public void addLocation(Long locationID, Long userID) {
+        Optional<User> userOptional = userRepository.findById(userID);
+        Optional<Location> locationOptional = locationRepository.findById(locationID);
+        if (!userOptional.isEmpty() && !locationOptional.isEmpty()) {
+            User user = userOptional.get();
+            Location location = locationOptional.get();
+            user.addLocation(location);
+            userRepository.save(user);
+        }
+    }
 
     public void deleteUser(Long username) {
         userRepository.deleteById(username);
     }
+
 }

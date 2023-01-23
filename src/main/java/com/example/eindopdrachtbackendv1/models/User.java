@@ -144,6 +144,10 @@ public class User {
         gears.add(gear);
     }
 
+    public void addLocation(Location location) {
+        locations.add(location);
+    }
+
     public List<Location> getLocations() {
         return locations;
     }
