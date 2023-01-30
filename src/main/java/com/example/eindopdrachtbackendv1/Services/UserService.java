@@ -6,6 +6,11 @@ import com.example.eindopdrachtbackendv1.Exceptions.RecordNotFoundException;
 import com.example.eindopdrachtbackendv1.Repositories.*;
 import com.example.eindopdrachtbackendv1.models.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,7 @@ public class UserService {
     private PasswordEncoder encoder;
 
     private RoleRepository roleRepository;
+
 
     public UserService(UserRepository userRepository, UploadRepository uploadRepository, FishingSpotRepository fishingSpotRepository, LocationRepository locationRepository, GearRepository gearRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -74,7 +80,8 @@ public class UserService {
         newUser.setDob(userDTO.getDob());
 
         Set<Role> userRoles = new HashSet<>();
-        userRoles.add(new Role("USER"));
+        Role role = roleRepository.findByRolename("USER");
+        userRoles.add(role);
         newUser.setRoles(userRoles);
 
 
@@ -82,6 +89,7 @@ public class UserService {
 
         return newUser;
     }
+
 
     private UserOutputDto userToUserOutputDto(User user) {
 
@@ -92,6 +100,7 @@ public class UserService {
         userOutputDto.setPassword(encoder.encode(user.getPassword()));
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setDob(user.getDob());
+        userOutputDto.setVerified(user.isVerified());
 
         return userOutputDto;
     }
@@ -105,6 +114,7 @@ public class UserService {
         user.setPassword(encoder.encode(userInputDto.getPassword()));
         user.setEmail(userInputDto.getEmail());
         user.setDob(userInputDto.getDob());
+        user.setVerified(userInputDto.isVerified());
 
         return user;
     }

@@ -22,4 +22,6 @@ public class UserOutputDto {
     private String email;
 
     private LocalDate dob;
+
+    private boolean isVerified;
 }

@@ -30,10 +30,10 @@ public class User {
     @Column
     private LocalDate dob;
 
+    private boolean isVerified;
+
+
     @ManyToMany
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
     @ManyToMany
     private List<FishingSpot> fishingSpots;
@@ -50,7 +50,7 @@ public class User {
 
     }
 
-    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations) {
+    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations, boolean isVerified) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -61,6 +61,7 @@ public class User {
         this.uploads = uploads;
         this.gears = gears;
         this.locations = locations;
+        this.isVerified = isVerified;
     }
 
     public Long getId() {
@@ -158,4 +159,13 @@ public class User {
     public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
 }

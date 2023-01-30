@@ -10,7 +10,7 @@ public class Role {
     @Id
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String rolename;
 
     @ManyToMany(mappedBy = "roles")

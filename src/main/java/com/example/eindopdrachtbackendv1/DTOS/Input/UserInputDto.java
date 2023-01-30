@@ -22,4 +22,6 @@ public class UserInputDto {
     private String email;
 
     private LocalDate dob;
+
+    private boolean isVerified;
 }
