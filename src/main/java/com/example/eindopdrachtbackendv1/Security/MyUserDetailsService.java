@@ -1,12 +1,17 @@
 package com.example.eindopdrachtbackendv1.Security;
 
 import com.example.eindopdrachtbackendv1.Repositories.UserRepository;
+import com.example.eindopdrachtbackendv1.models.Role;
 import com.example.eindopdrachtbackendv1.models.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -20,7 +25,18 @@ public class MyUserDetailsService implements UserDetailsService {
         Optional<User> ou = userRepos.findByUsername(username);
         if (ou.isPresent()) {
             User user = ou.get();
-            return new MyUserDetails(user);
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            for (Role role : user.getRoles()){
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.getRolename()));
+            }
+
+
+            return new org
+                    .springframework
+                    .security
+                    .core
+                    .userdetails
+                    .User(user.getUsername(), user.getPassword(), grantedAuthorities);
         }
         else {
             throw new UsernameNotFoundException(username);

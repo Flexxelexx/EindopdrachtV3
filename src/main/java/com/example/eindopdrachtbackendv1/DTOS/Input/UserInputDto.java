@@ -23,5 +23,5 @@ public class UserInputDto {
 
     private LocalDate dob;
 
-    private boolean isVerified;
+    private Boolean isVerified;
 }

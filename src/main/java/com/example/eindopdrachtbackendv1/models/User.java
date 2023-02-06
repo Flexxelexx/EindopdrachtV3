@@ -16,7 +16,7 @@ public class User {
 
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String username;
@@ -33,14 +33,14 @@ public class User {
     private boolean isVerified;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
     @ManyToMany
     private List<FishingSpot> fishingSpots;
     @OneToMany
     private List<Upload> uploads;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Gear> gears;
 
     @OneToMany

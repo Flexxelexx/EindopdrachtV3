@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class UserOutputDto {
@@ -23,5 +24,7 @@ public class UserOutputDto {
 
     private LocalDate dob;
 
-    private boolean isVerified;
+    private Boolean isVerified;
+
+    private List<Long> gearIds;
 }

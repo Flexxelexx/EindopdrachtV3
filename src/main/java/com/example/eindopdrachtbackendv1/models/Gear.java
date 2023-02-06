@@ -8,7 +8,7 @@ import java.util.Collection;
 public class Gear {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -23,20 +23,20 @@ public class Gear {
     @Column
     private double line;
 
-    @OneToMany
-    private Collection<User> users;
+    @ManyToOne
+    private User user;
 
 
     public Gear() {
     }
 
-    public Gear(Long id, String rodLength, String kindOfReel, String lure, double line, Collection<User> users) {
+    public Gear(Long id, String rodLength, String kindOfReel, String lure, double line, User users) {
         this.id = id;
         this.rodLength = rodLength;
         this.kindOfReel = kindOfReel;
         this.lure = lure;
         this.line = line;
-        this.users = users;
+        this.user = users;
     }
 
     public Long getId() {
@@ -79,11 +79,11 @@ public class Gear {
         this.line = line;
     }
 
-    public Collection<User> getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Collection<User> users) {
-        this.users = users;
+    public void setUsers(User users) {
+        this.user = users;
     }
 }

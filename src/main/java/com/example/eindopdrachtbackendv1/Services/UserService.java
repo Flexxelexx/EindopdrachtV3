@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -100,7 +101,13 @@ public class UserService {
         userOutputDto.setPassword(encoder.encode(user.getPassword()));
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setDob(user.getDob());
-        userOutputDto.setVerified(user.isVerified());
+        userOutputDto.setIsVerified(user.isVerified());
+//        userOutputDto.setGearIds(user.getGears().stream().map(Gear::getId).collect(Collectors.toList()));
+        List<Long> gearIds = new ArrayList<>();
+        for(Gear gear: user.getGears()){
+            gearIds.add(gear.getId());
+        }
+        userOutputDto.setGearIds(gearIds);
 
         return userOutputDto;
     }
@@ -114,7 +121,7 @@ public class UserService {
         user.setPassword(encoder.encode(userInputDto.getPassword()));
         user.setEmail(userInputDto.getEmail());
         user.setDob(userInputDto.getDob());
-        user.setVerified(userInputDto.isVerified());
+        user.setVerified(userInputDto.getIsVerified());
 
         return user;
     }
@@ -127,7 +134,21 @@ public class UserService {
         User user = userRepository.findById(inputId)
                 .orElseThrow(() -> new RecordNotFoundException(String.format("User with id %d not found", inputId)));
 
-        user.setId(userInput.getId());
+        if (userInput.getUsername() != null) {
+            user.setUsername(userInput.getUsername());
+        }
+        if (userInput.getPassword() != null) {
+            user.setPassword(encoder.encode(userInput.getPassword()));
+        }
+        if (userInput.getEmail() != null ) {
+            user.setEmail(userInput.getEmail());
+        }
+        if (userInput.getDob() != null) {
+            user.setDob(userInput.getDob());
+        }
+        if (userInput.getIsVerified() != null ) {
+            user.setVerified(userInput.getIsVerified());
+        }
 
         userRepository.save(user);
 
@@ -156,16 +177,17 @@ public class UserService {
         }
     }
 
-    public void addGear(Long gearID, Long userID) {
+    public void assignGearToUser(Long gearID, Long userID) {
         Optional<User> userOptional = userRepository.findById(userID);
         Optional<Gear> gearOptional = gearRepository.findById(gearID);
-        if (!userOptional.isEmpty() && !gearOptional.isEmpty()) {
+        if (userOptional != null && gearOptional != null) {
             User user = userOptional.get();
             Gear gear = gearOptional.get();
-            user.addGear(gear);
-            userRepository.save(user);
+            gear.setUsers(user);
+            gearRepository.save(gear);
         }
     }
+
 
     public void addLocation(Long locationID, Long userID) {
         Optional<User> userOptional = userRepository.findById(userID);

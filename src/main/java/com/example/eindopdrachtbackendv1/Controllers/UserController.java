@@ -4,7 +4,9 @@ import com.example.eindopdrachtbackendv1.DTOS.Input.UserInputDto;
 import com.example.eindopdrachtbackendv1.DTOS.Output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.Repositories.RoleRepository;
 import com.example.eindopdrachtbackendv1.Repositories.UserRepository;
+import com.example.eindopdrachtbackendv1.Services.GearService;
 import com.example.eindopdrachtbackendv1.Services.UserService;
+import com.example.eindopdrachtbackendv1.models.Gear;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import com.example.eindopdrachtbackendv1.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -27,14 +30,17 @@ public class UserController {
 
     private final UserService userService;
 
+    private final GearService gearService;
+
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder encoder;
 
-    public UserController(UserService userService, RoleRepository roleRepository, PasswordEncoder encoder, UserRepository userRepository) {
+    public UserController(UserService userService, GearService gearService, RoleRepository roleRepository, PasswordEncoder encoder, UserRepository userRepository) {
         this.userService = userService;
+        this.gearService = gearService;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.userRepository = userRepository;
@@ -78,6 +84,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(user);
     }
 
+
     @PostMapping(value = "/{id}/upload/{uploadid}")
     public ResponseEntity<Object> addUpload(@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadid) {
 
@@ -98,10 +105,11 @@ public class UserController {
     @PostMapping(value = "/{id}/addgear/{gearid}")
     public ResponseEntity<Object> addGear(@PathVariable("id") Long id, @PathVariable("gearid") Long gearid) {
 
-        userService.addGear(gearid, id);
+        userService.assignGearToUser(gearid, id);
 
         return ResponseEntity.noContent().build();
     }
+
 
     @PostMapping(value = "/{id}/addlocation/{locationid}")
     public ResponseEntity<Object> addLocation(@PathVariable("id") Long id, @PathVariable("locationid") Long locationid) {
