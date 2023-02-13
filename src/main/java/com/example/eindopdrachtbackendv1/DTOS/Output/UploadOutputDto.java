@@ -12,20 +12,15 @@ public class UploadOutputDto {
 
     public Long id;
 
-    @Min(value = 0)
-    @Max(value = 250)
-    public double weightFish;
+    public Double weightFish;
 
-    @Min(value = 0)
-    @Max(value = 100)
-    public double lengthFish;
+    public Double lengthFish;
 
     public String charsFish;
 
-    @NotBlank
     public String speciesFish;
 
     public byte[] photoFish;
 
-    private Rating rating;
+    public Rating rating;
 }

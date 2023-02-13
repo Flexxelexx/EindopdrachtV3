@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .antMatchers("/admin").hasAuthority("ADMIN")
                 .antMatchers("/secret").hasAuthority("ADMIN")
 
+
                 .antMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/uploads/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/fishingspots/**").hasAnyAuthority("USER", "ADMIN")

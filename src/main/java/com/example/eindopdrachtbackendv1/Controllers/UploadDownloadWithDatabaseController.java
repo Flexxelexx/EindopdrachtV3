@@ -1,6 +1,6 @@
 package com.example.eindopdrachtbackendv1.Controllers;
 
-import com.example.eindopdrachtbackendv1.Utils.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.Services.DatabaseService;
 import com.example.eindopdrachtbackendv1.models.FileDocument;
 import org.springframework.http.ResponseEntity;

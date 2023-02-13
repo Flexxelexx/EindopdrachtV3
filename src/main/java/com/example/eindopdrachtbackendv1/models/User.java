@@ -46,6 +46,9 @@ public class User {
     @OneToMany
     private List<Location> locations;
 
+    @OneToOne
+    FileUploadResponse file;
+
     public User() {
 
     }
@@ -168,4 +171,11 @@ public class User {
         isVerified = verified;
     }
 
+    public FileUploadResponse getFile() {
+        return file;
+    }
+
+    public void setFile(FileUploadResponse file) {
+        this.file = file;
+    }
 }

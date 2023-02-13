@@ -1,15 +1,23 @@
-package com.example.eindopdrachtbackendv1.Utils;
+package com.example.eindopdrachtbackendv1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class FileUploadResponse {
 
-    String fileName;
-    String contentType;
-    String url;
+    @Id
+    private String fileName;
+    private String contentType;
+    private String url;
 
     public FileUploadResponse(String fileName, String contentType, String url) {
         this.fileName = fileName;
         this.contentType = contentType;
         this.url = url;
+    }
+
+    public FileUploadResponse() {
     }
 
     public String getFileName() {
