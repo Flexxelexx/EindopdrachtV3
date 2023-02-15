@@ -7,6 +7,8 @@ import com.example.eindopdrachtbackendv1.Exceptions.RecordNotFoundException;
 import com.example.eindopdrachtbackendv1.Repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import com.example.eindopdrachtbackendv1.models.Upload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import static com.example.eindopdrachtbackendv1.models.Rating.ZEROSTARS;
 public class UploadService {
 
     private final UploadRepository uploadRepository;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public UploadService(UploadRepository uploadRepository) {
@@ -35,6 +39,19 @@ public class UploadService {
 
         return collection;
     }
+
+    public List<UploadOutputDto> getSpecies(String speciesfish) {
+        if (speciesfish == null) {
+            throw new IllegalArgumentException("speciesfish cannot be null");
+        }
+        List<UploadOutputDto> collection = new ArrayList<>();
+        List<Upload> list = uploadRepository.findBySpeciesfish(speciesfish);
+        for (Upload upload : list) {
+            collection.add(uploadToUploadOutputDto(upload));
+        }
+
+        return collection;
+}
 
     public UploadOutputDto getUpload(Long id) {
         UploadOutputDto dto;
@@ -60,7 +77,7 @@ public class UploadService {
         uploadOutputDto.setWeightFish(upload.getWeightFish());
         uploadOutputDto.setLengthFish(upload.getLengthFish());
         uploadOutputDto.setCharsFish(upload.getCharsFish());
-        uploadOutputDto.setSpeciesFish(upload.getSpeciesFish());
+        uploadOutputDto.setSpeciesFish(upload.getSpeciesfish());
         uploadOutputDto.setPhotoFish(upload.getPhotoFish());
 
         uploadOutputDto.setRating(upload.getRating());
@@ -77,7 +94,7 @@ public class UploadService {
         upload.setWeightFish(uploadInputDto.getWeightFish());
         upload.setLengthFish(uploadInputDto.getLengthFish());
         upload.setCharsFish(uploadInputDto.getCharsFish());
-        upload.setSpeciesFish(uploadInputDto.getSpeciesFish());
+        upload.setSpeciesfish(uploadInputDto.getSpeciesFish());
         upload.setPhotoFish(uploadInputDto.getPhotoFish());
 
         upload.setRating(Rating.ZEROSTARS);

@@ -1,5 +1,7 @@
 package com.example.eindopdrachtbackendv1.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -7,7 +9,16 @@ import java.util.Collection;
 @Table(name = "fishingspots")
 public class FishingSpot {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "sequence-generator")
+    @GenericGenerator(
+            name = "sequence-generator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "fishingspot_sequence"),
+                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1011"),
+                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
+            }
+    )
     private Long id;
     @Column
     private String spotLocation;

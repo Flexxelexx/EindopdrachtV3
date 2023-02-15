@@ -1,7 +1,7 @@
 package com.example.eindopdrachtbackendv1.Services;
 
 import com.example.eindopdrachtbackendv1.Repositories.DocFileRepository;
-import com.example.eindopdrachtbackendv1.Utils.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.models.FileDocument;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

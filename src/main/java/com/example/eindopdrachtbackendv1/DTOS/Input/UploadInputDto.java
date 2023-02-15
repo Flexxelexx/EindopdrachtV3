@@ -5,26 +5,23 @@ import lombok.Data;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Data
 public class UploadInputDto {
 
 
-    private Long id;
+    public Long id;
 
-    @Min(value = 0)
-    @Max(value = 250)
-    private double weightFish;
+    public Double weightFish;
 
-    @Min(value = 0)
-    @Max(value = 100)
-    private double lengthFish;
+    public Double lengthFish;
 
-    private String charsFish;
+    public String charsFish;
 
-    @NotBlank
-    private String speciesFish;
+    @NotNull
+    public String speciesFish;
 
-    private byte[] photoFish;
+    public byte[] photoFish;
 }

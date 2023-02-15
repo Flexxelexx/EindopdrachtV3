@@ -3,6 +3,8 @@ package com.example.eindopdrachtbackendv1.Controllers;
 import com.example.eindopdrachtbackendv1.DTOS.Input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.DTOS.Output.UploadOutputDto;
 import com.example.eindopdrachtbackendv1.Services.UploadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,21 +13,40 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/uploads")
 public class UploadController {
 
+    private final UploadService uploadService;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
-    private UploadService uploadService;
+    public UploadController(UploadService uploadService) {
+        this.uploadService = uploadService;
+    }
 
     @GetMapping(value = "")
     public ResponseEntity<List<UploadOutputDto>> getUploads() {
+
 
         List<UploadOutputDto> uploadDTOS = uploadService.getUploads();
 
         return ResponseEntity.ok().body(uploadDTOS);
     }
+
+    @GetMapping(value = "/species/{speciesfish}")
+    public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
+
+        System.out.println("De opgegeven speciesfish waarde is: " + speciesfish);
+        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish);
+        System.out.println("Lijst met uploadDTOS: " + uploadDTOS);
+
+        return ResponseEntity.ok().body(uploadDTOS);
+    }
+
 
     @GetMapping(value = "/{upload}")
     public ResponseEntity<UploadOutputDto> getUpload(@PathVariable("upload") Long id) {
@@ -68,12 +89,10 @@ public class UploadController {
 
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Object> deleteUpload (@PathVariable Long id) {
+    public ResponseEntity<Object> deleteUpload(@PathVariable Long id) {
         uploadService.deleteUpload(id);
         return ResponseEntity.noContent().build();
     }
-
-
 
 
 }
