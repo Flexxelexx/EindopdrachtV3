@@ -68,5 +68,12 @@ public class FishingSpotController {
        return ResponseEntity.noContent().build();
    }
 
+   @GetMapping(value = "/fishingspot/{city}")
+    public ResponseEntity<List<FishingspotOutputDto>> getCity(@PathVariable("city") String city) {
+
+        List<FishingspotOutputDto> fishingspotsDTOS = fishingSpotService.getCity(city);
+
+        return ResponseEntity.ok().body(fishingspotsDTOS);
+   }
 
 }

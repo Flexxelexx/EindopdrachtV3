@@ -36,17 +36,6 @@ public class UploadController {
         return ResponseEntity.ok().body(uploadDTOS);
     }
 
-    @GetMapping(value = "/species/{speciesfish}")
-    public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
-
-        System.out.println("De opgegeven speciesfish waarde is: " + speciesfish);
-        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish);
-        System.out.println("Lijst met uploadDTOS: " + uploadDTOS);
-
-        return ResponseEntity.ok().body(uploadDTOS);
-    }
-
-
     @GetMapping(value = "/{upload}")
     public ResponseEntity<UploadOutputDto> getUpload(@PathVariable("upload") Long id) {
 
@@ -86,12 +75,21 @@ public class UploadController {
 
     }
 
-
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteUpload(@PathVariable Long id) {
         uploadService.deleteUpload(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping(value = "/species/{speciesfish}")
+    public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
+
+        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish);
+
+        return ResponseEntity.ok().body(uploadDTOS);
+    }
+
 
 
 }

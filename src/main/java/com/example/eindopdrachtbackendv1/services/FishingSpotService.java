@@ -30,6 +30,19 @@ public class FishingSpotService {
         return collection;
     }
 
+    public List<FishingspotOutputDto> getCity(String city) {
+        if (city == null) {
+            throw new IllegalArgumentException("city cannot be null");
+        }
+        List<FishingspotOutputDto> collection = new ArrayList<>();
+        List<FishingSpot> list = fishingSpotRepository.findByCity(city);
+        for (FishingSpot fishingSpot : list) {
+            collection.add(fishingspotToFishingspotOutputDto(fishingSpot));
+        }
+
+        return collection;
+    }
+
     public FishingspotOutputDto getFishingSpot(String spotLocation) {
         FishingspotOutputDto dto;
         Optional<FishingSpot> user = fishingSpotRepository.findBySpotLocation(spotLocation);
