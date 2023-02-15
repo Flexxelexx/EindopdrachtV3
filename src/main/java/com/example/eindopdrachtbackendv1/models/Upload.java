@@ -3,6 +3,7 @@ package com.example.eindopdrachtbackendv1.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -26,6 +27,7 @@ public class Upload {
     private Double lengthFish;
     @Column
     private String charsFish;
+    @NotNull
     @Column
     private String speciesfish;
     @Column

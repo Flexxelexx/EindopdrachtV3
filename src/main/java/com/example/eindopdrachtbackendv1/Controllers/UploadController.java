@@ -37,12 +37,12 @@ public class UploadController {
         return ResponseEntity.ok().body(uploadDTOS);
     }
 
-    @GetMapping(value = "/species")
-    public ResponseEntity<List<UploadOutputDto>> getSpecies(String speciesfish) {
+    @GetMapping(value = "/species/{speciesfish}")
+    public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
 
-        System.out.println("getSpecies functie wordt uitgevoerd met speciesfish waarde " + speciesfish);
+        System.out.println("De opgegeven speciesfish waarde is: " + speciesfish);
         List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish);
-
+        System.out.println("Lijst met uploadDTOS: " + uploadDTOS);
 
         return ResponseEntity.ok().body(uploadDTOS);
     }
