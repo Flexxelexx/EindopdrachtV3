@@ -51,7 +51,7 @@ public class UploadService {
         }
 
         return collection;
-}
+    }
 
     public UploadOutputDto getUpload(Long id) {
         UploadOutputDto dto;
@@ -79,6 +79,7 @@ public class UploadService {
         uploadOutputDto.setCharsFish(upload.getCharsFish());
         uploadOutputDto.setSpeciesFish(upload.getSpeciesfish());
         uploadOutputDto.setPhotoFish(upload.getPhotoFish());
+        uploadOutputDto.setLocationCaught(upload.getLocationCaught());
 
         uploadOutputDto.setRating(upload.getRating());
 
@@ -96,6 +97,7 @@ public class UploadService {
         upload.setCharsFish(uploadInputDto.getCharsFish());
         upload.setSpeciesfish(uploadInputDto.getSpeciesFish());
         upload.setPhotoFish(uploadInputDto.getPhotoFish());
+        upload.setLocationCaught(uploadInputDto.getLocationCaught());
 
         upload.setRating(Rating.ZEROSTARS);
         return upload;

@@ -1,5 +1,8 @@
 package com.example.eindopdrachtbackendv1.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,8 +19,21 @@ public class User {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,
+            generator = "sequence-generator")
+    @GenericGenerator(
+            name = "sequence-generator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "user_sequence"),
+                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1002"),
+                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
+            }
+    )
     private Long id;
+
+    @Column
+    private String firstname;
     @Column
     private String username;
     @Column
@@ -28,9 +44,11 @@ public class User {
     @Email
     private String email;
     @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dob;
 
-    private boolean isVerified;
+    @Lob
+    private byte[] profilepicture;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -53,8 +71,9 @@ public class User {
 
     }
 
-    public User(Long id, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations, boolean isVerified) {
+    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations, byte[] profilepicture ) {
         this.id = id;
+        this.firstname = firstname;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -64,7 +83,7 @@ public class User {
         this.uploads = uploads;
         this.gears = gears;
         this.locations = locations;
-        this.isVerified = isVerified;
+        this.profilepicture = profilepicture;
     }
 
     public Long getId() {
@@ -73,6 +92,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getUsername() {
@@ -163,19 +190,6 @@ public class User {
         this.locations = locations;
     }
 
-    public boolean isVerified() {
-        return isVerified;
-    }
 
-    public void setVerified(boolean verified) {
-        isVerified = verified;
-    }
 
-    public FileUploadResponse getFile() {
-        return file;
-    }
-
-    public void setFile(FileUploadResponse file) {
-        this.file = file;
-    }
 }

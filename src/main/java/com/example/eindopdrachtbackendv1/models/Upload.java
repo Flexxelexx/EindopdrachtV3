@@ -27,12 +27,13 @@ public class Upload {
     private Double lengthFish;
     @Column
     private String charsFish;
-    @NotNull
     @Column
     private String speciesfish;
     @Column
     @Lob
     private byte[] photoFish;
+    @Column
+    private String locationCaught;
 
 
     @OneToMany(fetch = FetchType.EAGER)
@@ -41,11 +42,12 @@ public class Upload {
     private Rating rating;
 
 
+
     public Upload() {
 
     }
 
-    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, byte[] photoFish, Collection<User> users, Rating rating) {
+    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, byte[] photoFish, Collection<User> users, Rating rating, String locationCaught) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
@@ -54,6 +56,7 @@ public class Upload {
         this.photoFish = photoFish;
         this.users = users;
         this.rating = rating;
+        this.locationCaught = locationCaught;
     }
 
     public Long getId() {
@@ -68,7 +71,7 @@ public class Upload {
         return weightFish;
     }
 
-    public void setWeightFish(double weightFish) {
+    public void setWeightFish(Double weightFish) {
         this.weightFish = weightFish;
     }
 
@@ -76,7 +79,7 @@ public class Upload {
         return lengthFish;
     }
 
-    public void setLengthFish(double lengthFish) {
+    public void setLengthFish(Double lengthFish) {
         this.lengthFish = lengthFish;
     }
 
@@ -120,4 +123,13 @@ public class Upload {
     public void setRating(Rating rating) {
         this.rating = rating;
     }
+
+    public String getLocationCaught() {
+        return locationCaught;
+    }
+
+    public void setLocationCaught(String locationCaught) {
+        this.locationCaught = locationCaught;
+    }
+
 }

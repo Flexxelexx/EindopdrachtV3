@@ -1,5 +1,6 @@
 package com.example.eindopdrachtbackendv1.services;
 
+import com.example.eindopdrachtbackendv1.dtos.RoleDTO;
 import com.example.eindopdrachtbackendv1.dtos.input.UserInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.exceptions.RecordNotFoundException;
@@ -68,13 +69,14 @@ public class UserService {
 
     public User createUser(UserInputDto userDTO) {
         User newUser = new User();
+        newUser.setFirstname(userDTO.getFirstname());
         newUser.setUsername(userDTO.getUsername());
         newUser.setPassword(encoder.encode(userDTO.getPassword()));
         newUser.setEmail(userDTO.getEmail());
         newUser.setDob(userDTO.getDob());
 
         Set<Role> userRoles = new HashSet<>();
-        Role role = roleRepository.findByRolename("USER");
+        Role role = roleRepository.findByRolename("ROLE_USER");
         userRoles.add(role);
         newUser.setRoles(userRoles);
 
@@ -90,11 +92,12 @@ public class UserService {
         UserOutputDto userOutputDto = new UserOutputDto();
 
         userOutputDto.setId(user.getId());
+        userOutputDto.setFirstname(user.getFirstname());
         userOutputDto.setUsername(user.getUsername());
         userOutputDto.setPassword(encoder.encode(user.getPassword()));
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setDob(user.getDob());
-        userOutputDto.setIsVerified(user.isVerified());
+
 
         List<Long> gearIds = new ArrayList<>();
         for(Gear gear: user.getGears()){
@@ -110,13 +113,12 @@ public class UserService {
         User user = new User();
 
         user.setId(userInputDto.getId());
+        user.setFirstname(userInputDto.getFirstname());
         user.setUsername(userInputDto.getUsername());
         user.setPassword(encoder.encode(userInputDto.getPassword()));
         user.setEmail(userInputDto.getEmail());
         user.setDob(userInputDto.getDob());
-        user.setVerified(userInputDto.getIsVerified());
 
-//        user.setRoles(Rol);
         return user;
     }
 
@@ -128,6 +130,10 @@ public class UserService {
         User user = userRepository.findById(inputId)
                 .orElseThrow(() -> new RecordNotFoundException(String.format("User with id %d not found", inputId)));
 
+
+        if (userInput.getFirstname() != null) {
+            user.setFirstname(userInput.getFirstname());
+        }
         if (userInput.getUsername() != null) {
             user.setUsername(userInput.getUsername());
         }
@@ -139,9 +145,6 @@ public class UserService {
         }
         if (userInput.getDob() != null) {
             user.setDob(userInput.getDob());
-        }
-        if (userInput.getIsVerified() != null ) {
-            user.setVerified(userInput.getIsVerified());
         }
 
         userRepository.save(user);

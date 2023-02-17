@@ -12,4 +12,5 @@ public interface UploadRepository extends JpaRepository <Upload, Long> {
 
         List<Upload> findBySpeciesfish (String speciesfish);
 
+
 }

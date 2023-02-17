@@ -22,7 +22,7 @@ public class FishingSpotController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FishingspotOutputDto>> getFisingSpots() {
+    public ResponseEntity<List<FishingspotOutputDto>> getFishingSpots() {
 
        List<FishingspotOutputDto> fishingSpotDTOS = fishingSpotService.getFishingSpots();
 

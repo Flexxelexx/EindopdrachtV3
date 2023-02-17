@@ -1,8 +1,8 @@
 package com.example.eindopdrachtbackendv1.dtos.output;
 
-import com.example.eindopdrachtbackendv1.dtos.RoleDTO;
 import lombok.Data;
 
+import javax.persistence.Lob;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -13,6 +13,8 @@ import java.util.List;
 public class UserOutputDto {
 
     private Long id;
+
+    private String firstname;
 
     private String username;
 
@@ -25,9 +27,6 @@ public class UserOutputDto {
 
     private LocalDate dob;
 
-    private Boolean isVerified;
-
     private List<Long> gearIds;
 
-    private RoleDTO rolename;
 }

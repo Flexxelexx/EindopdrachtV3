@@ -16,7 +16,8 @@ public class UploadOutputDto {
 
     public String charsFish;
 
-    @NotNull
+    public String locationCaught;
+
     public String speciesFish;
 
     public byte[] photoFish;

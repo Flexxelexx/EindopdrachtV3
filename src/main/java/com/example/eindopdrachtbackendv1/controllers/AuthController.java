@@ -25,7 +25,7 @@ public class AuthController {
         this.jwtService = service;
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
     public ResponseEntity<Object> signIn(@RequestBody AuthDTO authDto) {
         UsernamePasswordAuthenticationToken up =
                 new UsernamePasswordAuthenticationToken(authDto.username, authDto.password);

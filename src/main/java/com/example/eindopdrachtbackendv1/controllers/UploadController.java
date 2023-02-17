@@ -13,14 +13,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/uploads")
 public class UploadController {
 
     private final UploadService uploadService;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UploadController(UploadService uploadService) {
@@ -85,7 +85,7 @@ public class UploadController {
     @GetMapping(value = "/species/{speciesfish}")
     public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
 
-        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish);
+        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish.toLowerCase(Locale.ROOT));
 
         return ResponseEntity.ok().body(uploadDTOS);
     }
