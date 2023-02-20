@@ -50,15 +50,9 @@ public class DatabaseService {
 
         FileDocument document = doc.findByFileName(fileName);
 
-//        this mediaType decides witch type you accept if you only accept 1 type
-//        MediaType contentType = MediaType.IMAGE_JPEG;
-//        this is going to accept multiple types
 
         String mimeType = request.getServletContext().getMimeType(document.getFileName());
 
-//        for download attachment use next line
-//        return ResponseEntity.ok().contentType(contentType).header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + resource.getFilename()).body(resource);
-//        for showing image in browser
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName()).body(document.getDocFile());
 
     }
@@ -78,7 +72,6 @@ public class DatabaseService {
 
             doc.save(fileDocument);
 
-//            next line makes url. example "http://localhost:8080/download/naam.jpg"
             String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFromDB/").path(name).toUriString();
 
             String contentType = file.getContentType();

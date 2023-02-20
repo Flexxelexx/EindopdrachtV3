@@ -23,8 +23,6 @@ public class UserService {
 
     private FishingSpotRepository fishingSpotRepository;
 
-    private LocationRepository locationRepository;
-
     private GearRepository gearRepository;
 
     private PasswordEncoder encoder;
@@ -32,11 +30,10 @@ public class UserService {
     private RoleRepository roleRepository;
 
 
-    public UserService(UserRepository userRepository, UploadRepository uploadRepository, FishingSpotRepository fishingSpotRepository, LocationRepository locationRepository, GearRepository gearRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, UploadRepository uploadRepository, FishingSpotRepository fishingSpotRepository, GearRepository gearRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.uploadRepository = uploadRepository;
         this.fishingSpotRepository = fishingSpotRepository;
-        this.locationRepository = locationRepository;
         this.gearRepository = gearRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
@@ -182,18 +179,6 @@ public class UserService {
             Gear gear = gearOptional.get();
             gear.setUsers(user);
             gearRepository.save(gear);
-        }
-    }
-
-
-    public void addLocation(Long locationID, Long userID) {
-        Optional<User> userOptional = userRepository.findById(userID);
-        Optional<Location> locationOptional = locationRepository.findById(locationID);
-        if (!userOptional.isEmpty() && !locationOptional.isEmpty()) {
-            User user = userOptional.get();
-            Location location = locationOptional.get();
-            user.addLocation(location);
-            userRepository.save(user);
         }
     }
 

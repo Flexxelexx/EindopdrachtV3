@@ -104,16 +104,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PostMapping(value = "/{id}/addlocation/{locationid}")
-    public ResponseEntity<Object> addLocation(@PathVariable("id") Long id, @PathVariable("locationid") Long locationid) {
-
-        userService.addLocation(locationid, id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-
     @DeleteMapping(value = "/{id}/deleteuser")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") Long username) {
         userService.deleteUser(username);

@@ -2,19 +2,22 @@ package com.example.eindopdrachtbackendv1.controllers;
 
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
+import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.models.Upload;
+import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.services.UploadService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping(value = "/uploads")
@@ -22,9 +25,16 @@ public class UploadController {
 
     private final UploadService uploadService;
 
+    private final UploadRepository uploadRepository;
+
+    private final PhotoController controller;
+
+
     @Autowired
-    public UploadController(UploadService uploadService) {
+    public UploadController(UploadService uploadService, UploadRepository uploadRepository, PhotoController controller) {
         this.uploadService = uploadService;
+        this.uploadRepository = uploadRepository;
+        this.controller = controller;
     }
 
     @GetMapping(value = "")
@@ -45,7 +55,7 @@ public class UploadController {
     }
 
     @PostMapping()
-    public ResponseEntity<UploadInputDto> createUpload(@RequestBody UploadInputDto id) {
+    public ResponseEntity<UploadInputDto> createUpload(@RequestBody UploadInputDto id) throws IOException {
 
         String newUpload = uploadService.createUpload(id).toString();
 
@@ -90,6 +100,14 @@ public class UploadController {
         return ResponseEntity.ok().body(uploadDTOS);
     }
 
+    @PostMapping("/{id}/photo")
+    public void assignPhotoToStudent(@PathVariable("id") Long studentNumber,
+                                     @RequestBody MultipartFile file) {
 
+        FileUploadResponse photo = controller.singleFileUpload(file);
+
+        uploadService.assignPhotoToStudent(photo.getFileName(), studentNumber);
+
+    }
 
 }

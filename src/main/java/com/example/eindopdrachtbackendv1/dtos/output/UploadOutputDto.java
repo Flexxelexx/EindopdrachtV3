@@ -1,7 +1,9 @@
 package com.example.eindopdrachtbackendv1.dtos.output;
 
+import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,11 +18,13 @@ public class UploadOutputDto {
 
     public String charsFish;
 
-    public String locationCaught;
-
     public String speciesFish;
 
-    public byte[] photoFish;
+    public String locationCaught;
+
+    public String cityCaught;
 
     public Rating rating;
+
+    public FileUploadResponse file;
 }

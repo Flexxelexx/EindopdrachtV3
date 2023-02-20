@@ -61,8 +61,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Gear> gears;
 
-    @OneToMany
-    private List<Location> locations;
 
     @OneToOne
     FileUploadResponse file;
@@ -71,7 +69,7 @@ public class User {
 
     }
 
-    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, List<Location> locations, byte[] profilepicture ) {
+    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, byte[] profilepicture ) {
         this.id = id;
         this.firstname = firstname;
         this.username = username;
@@ -82,7 +80,6 @@ public class User {
         this.fishingSpots = fishingSpots;
         this.uploads = uploads;
         this.gears = gears;
-        this.locations = locations;
         this.profilepicture = profilepicture;
     }
 
@@ -177,19 +174,5 @@ public class User {
     public void addGear(Gear gear) {
         gears.add(gear);
     }
-
-    public void addLocation(Location location) {
-        locations.add(location);
-    }
-
-    public List<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
-    }
-
-
-
+    
 }

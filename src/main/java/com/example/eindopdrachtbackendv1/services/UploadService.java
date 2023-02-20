@@ -4,6 +4,8 @@ package com.example.eindopdrachtbackendv1.services;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
 import com.example.eindopdrachtbackendv1.exceptions.RecordNotFoundException;
+import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.repositories.FileUploadRepository;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import com.example.eindopdrachtbackendv1.models.Upload;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,18 +24,21 @@ import static com.example.eindopdrachtbackendv1.models.Rating.ZEROSTARS;
 @Service
 public class UploadService {
 
-    private final UploadRepository uploadRepository;
+    private final UploadRepository repository;
+
+    private final FileUploadRepository uploadRepository;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public UploadService(UploadRepository uploadRepository) {
+    public UploadService(UploadRepository repository, FileUploadRepository uploadRepository) {
+        this.repository = repository;
         this.uploadRepository = uploadRepository;
     }
 
     public List<UploadOutputDto> getUploads() {
         List<UploadOutputDto> collection = new ArrayList<>();
-        List<Upload> list = uploadRepository.findAll();
+        List<Upload> list = repository.findAll();
         for (Upload upload : list) {
             collection.add(uploadToUploadOutputDto(upload));
         }
@@ -45,7 +51,7 @@ public class UploadService {
             throw new IllegalArgumentException("speciesfish cannot be null");
         }
         List<UploadOutputDto> collection = new ArrayList<>();
-        List<Upload> list = uploadRepository.findBySpeciesfish(speciesfish);
+        List<Upload> list = repository.findBySpeciesfish(speciesfish);
         for (Upload upload : list) {
             collection.add(uploadToUploadOutputDto(upload));
         }
@@ -55,7 +61,7 @@ public class UploadService {
 
     public UploadOutputDto getUpload(Long id) {
         UploadOutputDto dto;
-        Optional<Upload> uploadOptional = uploadRepository.findById(id);
+        Optional<Upload> uploadOptional = repository.findById(id);
         if (uploadOptional.isPresent()) {
             dto = uploadToUploadOutputDto(uploadOptional.get());
         } else {
@@ -64,8 +70,8 @@ public class UploadService {
         return dto;
     }
 
-    public Long createUpload(UploadInputDto uploadDTO) {
-        Upload newUpload = uploadRepository.save(uploadInputDtoToUpload(uploadDTO));
+    public Long createUpload(UploadInputDto uploadDTO) throws IOException {
+        Upload newUpload = repository.save(uploadInputDtoToUpload(uploadDTO));
         return newUpload.getId();
     }
 
@@ -78,15 +84,15 @@ public class UploadService {
         uploadOutputDto.setLengthFish(upload.getLengthFish());
         uploadOutputDto.setCharsFish(upload.getCharsFish());
         uploadOutputDto.setSpeciesFish(upload.getSpeciesfish());
-        uploadOutputDto.setPhotoFish(upload.getPhotoFish());
         uploadOutputDto.setLocationCaught(upload.getLocationCaught());
+        uploadOutputDto.setCityCaught(upload.getCityCaught());
 
         uploadOutputDto.setRating(upload.getRating());
 
         return uploadOutputDto;
     }
 
-    private Upload uploadInputDtoToUpload(UploadInputDto uploadInputDto) {
+    private Upload uploadInputDtoToUpload(UploadInputDto uploadInputDto) throws IOException {
 
 
         Upload upload = new Upload();
@@ -96,8 +102,8 @@ public class UploadService {
         upload.setLengthFish(uploadInputDto.getLengthFish());
         upload.setCharsFish(uploadInputDto.getCharsFish());
         upload.setSpeciesfish(uploadInputDto.getSpeciesFish());
-        upload.setPhotoFish(uploadInputDto.getPhotoFish());
         upload.setLocationCaught(uploadInputDto.getLocationCaught());
+        upload.setCityCaught(uploadInputDto.getCityCaught());
 
         upload.setRating(Rating.ZEROSTARS);
         return upload;
@@ -107,10 +113,16 @@ public class UploadService {
 
         Long inputId = uploadInput.getId();
 
-        Upload upload = uploadRepository.findById(inputId).map(x -> uploadInputDtoToUpload(uploadInput))
+        Upload upload = repository.findById(inputId).map(x -> {
+                    try {
+                        return uploadInputDtoToUpload(uploadInput);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .orElseThrow(() -> new RecordNotFoundException(String.format("Upload with id %d not found", inputId)));
 
-        uploadRepository.save(upload);
+        repository.save(upload);
 
         return uploadToUploadOutputDto(upload);
     }
@@ -137,14 +149,34 @@ public class UploadService {
             default:
                 ratingEnum = ZEROSTARS;
         }
-        Upload upload = uploadRepository.findById(uploadId).get();
+        Upload upload = repository.findById(uploadId).get();
         upload.setRating(ratingEnum);
-        uploadRepository.save(upload);
+        repository.save(upload);
     }
 
     public void deleteUpload(Long id) {
-        uploadRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
+
+    public void assignPhotoToStudent(String name, Long id) {
+
+        Optional<Upload> optionalUpload = repository.findById(id);
+
+        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(name);
+
+        if (optionalUpload.isPresent() && fileUploadResponse.isPresent()) {
+
+            FileUploadResponse photo = fileUploadResponse.get();
+
+            Upload student = optionalUpload.get();
+
+            student.setFile(photo);
+
+            repository.save(student);
+
+        }
+
+    }
 
 }

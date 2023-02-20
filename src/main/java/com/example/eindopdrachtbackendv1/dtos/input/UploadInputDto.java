@@ -1,6 +1,7 @@
 package com.example.eindopdrachtbackendv1.dtos.input;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -19,7 +20,7 @@ public class UploadInputDto {
 
     public String speciesFish;
 
-    public byte[] photoFish;
-
     public String locationCaught;
+
+    public String cityCaught;
 }

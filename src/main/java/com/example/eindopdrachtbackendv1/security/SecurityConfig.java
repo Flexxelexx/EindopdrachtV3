@@ -59,6 +59,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/fishingspots").permitAll()
                 .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/single/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
 
                 .antMatchers("/**").authenticated()
 

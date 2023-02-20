@@ -1,9 +1,9 @@
 package com.example.eindopdrachtbackendv1.models;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -30,10 +30,10 @@ public class Upload {
     @Column
     private String speciesfish;
     @Column
-    @Lob
-    private byte[] photoFish;
-    @Column
     private String locationCaught;
+
+    @Column
+    private String cityCaught;
 
 
     @OneToMany(fetch = FetchType.EAGER)
@@ -41,22 +41,25 @@ public class Upload {
 
     private Rating rating;
 
+    @OneToOne
+    FileUploadResponse file;
+
 
 
     public Upload() {
 
     }
 
-    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, byte[] photoFish, Collection<User> users, Rating rating, String locationCaught) {
+    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, Collection<User> users, Rating rating, String locationCaught, String cityCaught) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
         this.charsFish = charsFish;
         this.speciesfish = speciesfish;
-        this.photoFish = photoFish;
         this.users = users;
         this.rating = rating;
         this.locationCaught = locationCaught;
+        this.cityCaught = cityCaught;
     }
 
     public Long getId() {
@@ -99,14 +102,6 @@ public class Upload {
         this.speciesfish = speciesfish;
     }
 
-    public byte[] getPhotoFish() {
-        return photoFish;
-    }
-
-    public void setPhotoFish(byte[] photoFish) {
-        this.photoFish = photoFish;
-    }
-
     public Collection<User> getUsers() {
         return users;
     }
@@ -114,7 +109,6 @@ public class Upload {
     public void setUsers(Collection<User> users) {
         this.users = users;
     }
-
 
     public Rating getRating() {
         return rating;
@@ -132,4 +126,19 @@ public class Upload {
         this.locationCaught = locationCaught;
     }
 
+    public String getCityCaught() {
+        return cityCaught;
+    }
+
+    public void setCityCaught(String cityCaught) {
+        this.cityCaught = cityCaught;
+    }
+
+    public FileUploadResponse getFile() {
+        return file;
+    }
+
+    public void setFile(FileUploadResponse file) {
+        this.file = file;
+    }
 }
