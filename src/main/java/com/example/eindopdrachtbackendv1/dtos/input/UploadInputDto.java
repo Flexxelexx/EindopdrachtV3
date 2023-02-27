@@ -1,9 +1,7 @@
 package com.example.eindopdrachtbackendv1.dtos.input;
 
+import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotNull;
 
 
 @Data
@@ -23,4 +21,16 @@ public class UploadInputDto {
     public String locationCaught;
 
     public String cityCaught;
+
+    public FileUploadResponse file;
+
+    public UploadInputDto(Double weightFish, Double lengthFish, String charsFish, String speciesFish, String locationCaught, String cityCaught, FileUploadResponse file) {
+        this.weightFish = weightFish;
+        this.lengthFish = lengthFish;
+        this.charsFish = charsFish;
+        this.speciesFish = speciesFish;
+        this.locationCaught = locationCaught;
+        this.cityCaught = cityCaught;
+        this.file = file;
+    }
 }

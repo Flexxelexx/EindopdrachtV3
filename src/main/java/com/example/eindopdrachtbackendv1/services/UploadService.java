@@ -1,16 +1,14 @@
 package com.example.eindopdrachtbackendv1.services;
 
 
+import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
-import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
+import com.example.eindopdrachtbackendv1.dtos.output.UploadGearOutputDto;
 import com.example.eindopdrachtbackendv1.exceptions.RecordNotFoundException;
-import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
-import com.example.eindopdrachtbackendv1.repositories.FileUploadRepository;
+import com.example.eindopdrachtbackendv1.models.*;
+import com.example.eindopdrachtbackendv1.repositories.DocFileRepository;
+import com.example.eindopdrachtbackendv1.repositories.GearRepository;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
-import com.example.eindopdrachtbackendv1.models.Rating;
-import com.example.eindopdrachtbackendv1.models.Upload;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,18 +24,18 @@ public class UploadService {
 
     private final UploadRepository repository;
 
-    private final FileUploadRepository uploadRepository;
+    private final DocFileRepository docFileRepository;
+    private final GearRepository gearRepository;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
-    public UploadService(UploadRepository repository, FileUploadRepository uploadRepository) {
+    public UploadService(UploadRepository repository, DocFileRepository docFileRepository, GearRepository gearRepository) {
         this.repository = repository;
-        this.uploadRepository = uploadRepository;
+        this.docFileRepository = docFileRepository;
+        this.gearRepository = gearRepository;
     }
 
-    public List<UploadOutputDto> getUploads() {
-        List<UploadOutputDto> collection = new ArrayList<>();
+    public List<UploadGearOutputDto> getUploads() {
+        List<UploadGearOutputDto> collection = new ArrayList<>();
         List<Upload> list = repository.findAll();
         for (Upload upload : list) {
             collection.add(uploadToUploadOutputDto(upload));
@@ -46,11 +44,11 @@ public class UploadService {
         return collection;
     }
 
-    public List<UploadOutputDto> getSpecies(String speciesfish) {
+    public List<UploadGearOutputDto> getSpecies(String speciesfish) {
         if (speciesfish == null) {
             throw new IllegalArgumentException("speciesfish cannot be null");
         }
-        List<UploadOutputDto> collection = new ArrayList<>();
+        List<UploadGearOutputDto> collection = new ArrayList<>();
         List<Upload> list = repository.findBySpeciesfish(speciesfish);
         for (Upload upload : list) {
             collection.add(uploadToUploadOutputDto(upload));
@@ -59,8 +57,8 @@ public class UploadService {
         return collection;
     }
 
-    public UploadOutputDto getUpload(Long id) {
-        UploadOutputDto dto;
+    public UploadGearOutputDto getUpload(Long id) {
+        UploadGearOutputDto dto;
         Optional<Upload> uploadOptional = repository.findById(id);
         if (uploadOptional.isPresent()) {
             dto = uploadToUploadOutputDto(uploadOptional.get());
@@ -70,26 +68,53 @@ public class UploadService {
         return dto;
     }
 
-    public Long createUpload(UploadInputDto uploadDTO) throws IOException {
-        Upload newUpload = repository.save(uploadInputDtoToUpload(uploadDTO));
+
+    public Long createUpload(UploadInputDto uploadDTO, Long gearID) throws IOException {
+        Upload upload = uploadInputDtoToUpload(uploadDTO);
+        Optional<Gear> optionalGear = gearRepository.findById(gearID);
+        Optional<FileDocument> optionalFileDocument = docFileRepository.findByFileName(uploadDTO.getFile().getFileName());
+        if (optionalGear.isPresent()) {
+            Gear gear = optionalGear.get();
+            upload.setGear(gear);
+        }
+        if (optionalFileDocument.isPresent()) {
+            FileDocument fileUpload = optionalFileDocument.get();
+            upload.setFile(fileUpload);
+        }
+
+        Upload newUpload = repository.save(upload);
         return newUpload.getId();
     }
 
-    private UploadOutputDto uploadToUploadOutputDto(Upload upload) {
+    private UploadGearOutputDto uploadToUploadOutputDto(Upload upload) {
 
-        UploadOutputDto uploadOutputDto = new UploadOutputDto();
+        UploadGearOutputDto uploadGearOutputDto = new UploadGearOutputDto();
 
-        uploadOutputDto.setId(upload.getId());
-        uploadOutputDto.setWeightFish(upload.getWeightFish());
-        uploadOutputDto.setLengthFish(upload.getLengthFish());
-        uploadOutputDto.setCharsFish(upload.getCharsFish());
-        uploadOutputDto.setSpeciesFish(upload.getSpeciesfish());
-        uploadOutputDto.setLocationCaught(upload.getLocationCaught());
-        uploadOutputDto.setCityCaught(upload.getCityCaught());
+        uploadGearOutputDto.setId(upload.getId());
+        uploadGearOutputDto.setWeightFish(upload.getWeightFish());
+        uploadGearOutputDto.setLengthFish(upload.getLengthFish());
+        uploadGearOutputDto.setCharsFish(upload.getCharsFish());
+        uploadGearOutputDto.setSpeciesFish(upload.getSpeciesfish());
+        uploadGearOutputDto.setLocationCaught(upload.getLocationCaught());
+        uploadGearOutputDto.setCityCaught(upload.getCityCaught());
+        if(upload.getFile() != null) {
+            FileUploadResponse fileUploadResponse = new FileUploadResponse(
+                    upload.getFile().getFileName(),
+                    "Image",
+                    "http://localhost:8080/downloadFromDB/" + upload.getFile().getFileName()
+            );
+            uploadGearOutputDto.setFile(fileUploadResponse);
+        }
 
-        uploadOutputDto.setRating(upload.getRating());
+      uploadGearOutputDto.setRodLength(upload.getGear().getRodLength());
+        uploadGearOutputDto.setKindOfReel(upload.getGear().getKindOfReel());
+        uploadGearOutputDto.setKindOfLure(upload.getGear().getKindOfLure());
+        uploadGearOutputDto.setLineLength(upload.getGear().getLineLength());
 
-        return uploadOutputDto;
+
+        uploadGearOutputDto.setRating(upload.getRating());
+
+        return uploadGearOutputDto;
     }
 
     private Upload uploadInputDtoToUpload(UploadInputDto uploadInputDto) throws IOException {
@@ -105,11 +130,12 @@ public class UploadService {
         upload.setLocationCaught(uploadInputDto.getLocationCaught());
         upload.setCityCaught(uploadInputDto.getCityCaught());
 
+
         upload.setRating(Rating.ZEROSTARS);
         return upload;
     }
 
-    public UploadOutputDto updateUpload(UploadInputDto uploadInput) {
+    public UploadGearOutputDto updateUpload(UploadInputDto uploadInput) {
 
         Long inputId = uploadInput.getId();
 
@@ -159,24 +185,15 @@ public class UploadService {
     }
 
 
-    public void assignPhotoToStudent(String name, Long id) {
-
-        Optional<Upload> optionalUpload = repository.findById(id);
-
-        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(name);
-
-        if (optionalUpload.isPresent() && fileUploadResponse.isPresent()) {
-
-            FileUploadResponse photo = fileUploadResponse.get();
-
-            Upload student = optionalUpload.get();
-
-            student.setFile(photo);
-
-            repository.save(student);
-
+    public void addGearToUpload(Long gearID, Long userID) {
+        Optional<Upload> uploadOptional = repository.findById(userID);
+        Optional<Gear> gearOptional = gearRepository.findById(gearID);
+        if (uploadOptional != null && gearOptional != null) {
+            Upload upload = uploadOptional.get();
+            Gear gear = gearOptional.get();
+            gear.setUpload(upload);
+            gearRepository.save(gear);
         }
-
     }
 
 }

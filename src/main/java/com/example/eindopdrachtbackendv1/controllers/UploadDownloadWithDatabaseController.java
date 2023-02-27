@@ -1,8 +1,9 @@
 package com.example.eindopdrachtbackendv1.controllers;
 
-import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.services.DatabaseService;
 import com.example.eindopdrachtbackendv1.models.FileDocument;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,15 +24,24 @@ public class UploadDownloadWithDatabaseController {
         this.databaseService = databaseService;
     }
 
-    @PostMapping("single/uploadDb")
-    public FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+//    @PostMapping("single/uploadDb")
+//    public FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+//
+//        FileDocument fileDocument = databaseService.uploadFileDocument(file);
+//        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
+//
+//        String contentType = file.getContentType();
+//
+//        return new FileUploadResponse(fileDocument.getFileName(), url, contentType );
+//    }
 
-        FileDocument fileDocument = databaseService.uploadFileDocument(file);
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
-
+    @PostMapping("/single/uploadDb")
+    public FileUploadResponse singleFileUpload(@RequestParam( value = "file") MultipartFile file ) throws IOException {
+        String fileName = System.currentTimeMillis() + "-" + new Random().nextInt(1000) + "-" + file.getOriginalFilename();
+        FileDocument fileDocument = databaseService.uploadFileDocument(fileName, file);
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFromDB/").path(fileName).toUriString();
         String contentType = file.getContentType();
-
-        return new FileUploadResponse(fileDocument.getFileName(), url, contentType );
+        return new FileUploadResponse(fileDocument.getFileName(), contentType, url);
     }
 
     @GetMapping("/downloadFromDB/{fileName}")

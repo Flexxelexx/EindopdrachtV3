@@ -16,20 +16,20 @@ public class GearService {
 
     private final GearRepository gearRepository;
 
-    public GearService (GearRepository gearRepository) {
+    public GearService(GearRepository gearRepository) {
         this.gearRepository = gearRepository;
     }
 
     public List<GearOutputDto> getGears() {
-        List <GearOutputDto> collection = new ArrayList<>();
-        List <Gear> list = gearRepository.findAll();
+        List<GearOutputDto> collection = new ArrayList<>();
+        List<Gear> list = gearRepository.findAll();
         for (Gear gear : list) {
             collection.add(gearToGearOutputDto(gear));
         }
         return collection;
     }
 
-    public GearOutputDto getGear (Long id) {
+    public GearOutputDto getGear(Long id) {
         GearOutputDto dto;
         Optional<Gear> gearOptional = gearRepository.findById(id);
         if (gearOptional.isPresent()) {
@@ -40,38 +40,38 @@ public class GearService {
         return dto;
     }
 
-    public Long createGear (GearInputDto gearDTO) {
+    public Long createGear(GearInputDto gearDTO) {
         Gear newGear = gearRepository.save(gearInputDtoToGear(gearDTO));
         return newGear.getId();
     }
 
-    private GearOutputDto gearToGearOutputDto (Gear gear) {
+    private GearOutputDto gearToGearOutputDto(Gear gear) {
 
         GearOutputDto gearOutputDto = new GearOutputDto();
 
         gearOutputDto.setId(gear.getId());
         gearOutputDto.setRodLength(gear.getRodLength());
         gearOutputDto.setKindOfReel(gear.getKindOfReel());
-        gearOutputDto.setLure(gear.getLure());
-        gearOutputDto.setLine(gear.getLine());
+        gearOutputDto.setKindOfLure(gear.getKindOfLure());
+        gearOutputDto.setLineLength(gear.getLineLength());
 
         return gearOutputDto;
     }
 
-    private Gear gearInputDtoToGear (GearInputDto gearInputDto) {
+    private Gear gearInputDtoToGear(GearInputDto gearInputDto) {
 
         Gear gear = new Gear();
 
         gear.setId(gearInputDto.getId());
         gear.setRodLength(gearInputDto.getRodLength());
         gear.setKindOfReel(gearInputDto.getKindOfReel());
-        gear.setLure(gearInputDto.getLure());
-        gear.setLine(gearInputDto.getLine());
+        gear.setKindOfLure(gearInputDto.getLure());
+        gear.setLineLength(gearInputDto.getLine());
 
         return gear;
     }
 
-    public GearOutputDto updateGear (GearInputDto gearInput) {
+    public GearOutputDto updateGear(GearInputDto gearInput) {
 
         Long inputId = gearInput.getId();
 
@@ -83,7 +83,7 @@ public class GearService {
         return gearToGearOutputDto(gear);
     }
 
-    public void deleteGear (Long id) {
+    public void deleteGear(Long id) {
         gearRepository.deleteById(id);
     }
 }

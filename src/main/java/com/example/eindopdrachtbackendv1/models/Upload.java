@@ -4,7 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "uploads")
@@ -36,21 +38,23 @@ public class Upload {
     private String cityCaught;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Collection<User> users;
+    @ManyToOne
+    private User users;
 
     private Rating rating;
 
     @OneToOne
-    FileUploadResponse file;
+    FileDocument file;
 
+    @OneToOne
+    Gear gear;
 
 
     public Upload() {
 
     }
 
-    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, Collection<User> users, Rating rating, String locationCaught, String cityCaught) {
+    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, User users, Rating rating, String locationCaught, String cityCaught, Gear gear) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
@@ -60,6 +64,7 @@ public class Upload {
         this.rating = rating;
         this.locationCaught = locationCaught;
         this.cityCaught = cityCaught;
+        this.gear = gear;
     }
 
     public Long getId() {
@@ -102,11 +107,11 @@ public class Upload {
         this.speciesfish = speciesfish;
     }
 
-    public Collection<User> getUsers() {
+    public User getUsers() {
         return users;
     }
 
-    public void setUsers(Collection<User> users) {
+    public void setUsers(User users) {
         this.users = users;
     }
 
@@ -134,11 +139,20 @@ public class Upload {
         this.cityCaught = cityCaught;
     }
 
-    public FileUploadResponse getFile() {
+    public FileDocument getFile() {
         return file;
     }
 
-    public void setFile(FileUploadResponse file) {
+    public void setFile(FileDocument file) {
         this.file = file;
     }
+
+    public Gear getGear() {
+        return gear;
+    }
+
+    public void setGear(Gear gear) {
+        this.gear = gear;
+    }
+
 }

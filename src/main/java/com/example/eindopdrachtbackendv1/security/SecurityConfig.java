@@ -54,6 +54,7 @@ public class SecurityConfig {
 
 
                 .antMatchers(HttpMethod.POST, "/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/uploads/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/uploads/**").permitAll()
@@ -61,6 +62,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/single/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/download/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/photos/**").permitAll()
 
                 .antMatchers("/**").authenticated()
 

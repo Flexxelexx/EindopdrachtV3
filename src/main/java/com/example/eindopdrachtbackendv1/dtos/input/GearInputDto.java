@@ -9,11 +9,18 @@ public class GearInputDto {
 
     private Long id;
 
-    private String rodLength;
+    private Double rodLength;
 
     private String kindOfReel;
 
     private String lure;
 
-    private double line;
+    private String line;
+
+    public GearInputDto(Double rodLength, String kindOfReel, String lure, String line) {
+        this.rodLength = rodLength;
+        this.kindOfReel = kindOfReel;
+        this.lure = lure;
+        this.line = line;
+    }
 }

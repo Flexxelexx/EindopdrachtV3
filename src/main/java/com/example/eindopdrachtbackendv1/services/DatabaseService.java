@@ -1,7 +1,8 @@
 package com.example.eindopdrachtbackendv1.services;
 
+import com.example.eindopdrachtbackendv1.exceptions.RecordNotFoundException;
 import com.example.eindopdrachtbackendv1.repositories.DocFileRepository;
-import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
+import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.models.FileDocument;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -26,7 +27,7 @@ import java.util.zip.ZipOutputStream;
 public class DatabaseService {
     private final DocFileRepository doc;
 
-    public DatabaseService(DocFileRepository doc){
+    public DatabaseService(DocFileRepository doc) {
         this.doc = doc;
     }
 
@@ -34,30 +35,43 @@ public class DatabaseService {
         return doc.findAll();
     }
 
-    public FileDocument uploadFileDocument(MultipartFile file) throws IOException {
-        String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+//    public FileDocument uploadFileDocument(MultipartFile file) throws IOException {
+//        String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+//        FileDocument fileDocument = new FileDocument();
+//        fileDocument.setFileName(name);
+//        fileDocument.setDocFile(file.getBytes());
+//
+//        doc.save(fileDocument);
+//
+//        return fileDocument;
+//
+//    }
+
+    public FileDocument uploadFileDocument(String fileName, MultipartFile file) throws IOException {
         FileDocument fileDocument = new FileDocument();
-        fileDocument.setFileName(name);
+        fileDocument.setFileName(fileName);
         fileDocument.setDocFile(file.getBytes());
 
         doc.save(fileDocument);
 
         return fileDocument;
-
     }
 
-    public ResponseEntity<byte[]> singleFileDownload(String fileName, HttpServletRequest request){
+    public ResponseEntity<byte[]> singleFileDownload(String fileName, HttpServletRequest request) {
 
-        FileDocument document = doc.findByFileName(fileName);
+        Optional<FileDocument> optionalFileDocument = doc.findByFileName(fileName);
+        if (optionalFileDocument.isEmpty()) {
+            throw new RecordNotFoundException("file not found");
+        } else {
+            FileDocument document = optionalFileDocument.get();
 
+            String mimeType = request.getServletContext().getMimeType(document.getFileName());
 
-        String mimeType = request.getServletContext().getMimeType(document.getFileName());
-
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName()).body(document.getDocFile());
-
+            return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName()).body(document.getDocFile());
+        }
     }
 
-    public List<FileUploadResponse> createMultipleUpload(MultipartFile[] files){
+    public List<FileUploadResponse> createMultipleUpload(MultipartFile[] files) {
         List<FileUploadResponse> uploadResponseList = new ArrayList<>();
         Arrays.stream(files).forEach(file -> {
 
@@ -75,6 +89,8 @@ public class DatabaseService {
             String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFromDB/").path(name).toUriString();
 
             String contentType = file.getContentType();
+
+            String uniqueEndpoint = ServletUriComponentsBuilder.fromCurrentContextPath().path("/photos/").path(fileDocument.getId().toString()).toUriString();
 
             FileUploadResponse response = new FileUploadResponse(name, contentType, url);
 
@@ -112,7 +128,7 @@ public class DatabaseService {
             throw new RuntimeException("Issue in reading the file", e);
         }
 
-        if(resource.exists()&& resource.isReadable()) {
+        if (resource.exists() && resource.isReadable()) {
             return resource;
         } else {
             throw new RuntimeException("the file doesn't exist or not readable");

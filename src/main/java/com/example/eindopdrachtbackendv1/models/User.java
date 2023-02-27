@@ -47,10 +47,6 @@ public class User {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dob;
 
-    @Lob
-    private byte[] profilepicture;
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
     @ManyToMany
@@ -58,18 +54,14 @@ public class User {
     @OneToMany
     private List<Upload> uploads;
 
-    @OneToMany(mappedBy = "user")
-    private List<Gear> gears;
-
-
     @OneToOne
-    FileUploadResponse file;
+    FileDocument file;
 
     public User() {
 
     }
 
-    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, List<Gear> gears, byte[] profilepicture ) {
+    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads ) {
         this.id = id;
         this.firstname = firstname;
         this.username = username;
@@ -79,8 +71,6 @@ public class User {
         this.roles = roles;
         this.fishingSpots = fishingSpots;
         this.uploads = uploads;
-        this.gears = gears;
-        this.profilepicture = profilepicture;
     }
 
     public Long getId() {
@@ -155,14 +145,6 @@ public class User {
         this.uploads = uploads;
     }
 
-    public List<Gear> getGears() {
-        return gears;
-    }
-
-    public void setGears(List<Gear> gears) {
-        this.gears = gears;
-    }
-
     public void addFishingSpot(FishingSpot fishingSpot) {
         fishingSpots.add(fishingSpot);
     }
@@ -171,8 +153,5 @@ public class User {
         uploads.add(upload);
     }
 
-    public void addGear(Gear gear) {
-        gears.add(gear);
-    }
     
 }

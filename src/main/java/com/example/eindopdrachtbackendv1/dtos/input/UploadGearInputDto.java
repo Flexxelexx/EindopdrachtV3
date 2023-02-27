@@ -1,14 +1,10 @@
-package com.example.eindopdrachtbackendv1.dtos.output;
+package com.example.eindopdrachtbackendv1.dtos.input;
 
 import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
-import com.example.eindopdrachtbackendv1.models.Gear;
-import com.example.eindopdrachtbackendv1.models.Rating;
 import lombok.Data;
 
 @Data
-public class UploadOutputDto {
-
-    public Long id;
+public class UploadGearInputDto {
 
     public Double weightFish;
 
@@ -22,9 +18,13 @@ public class UploadOutputDto {
 
     public String cityCaught;
 
-    public Rating rating;
-
     public FileUploadResponse file;
 
+    private Double rodLength;
 
+    private String kindOfReel;
+
+    private String kindOfLure;
+
+    private String lineLength;
 }

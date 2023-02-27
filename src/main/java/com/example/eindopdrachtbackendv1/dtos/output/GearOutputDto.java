@@ -7,11 +7,11 @@ public class GearOutputDto {
 
     private Long id;
 
-    private String rodLength;
+    private Double rodLength;
 
     private String kindOfReel;
 
-    private String lure;
+    private String kindOfLure;
 
-    private double line;
+    private String lineLength;
 }

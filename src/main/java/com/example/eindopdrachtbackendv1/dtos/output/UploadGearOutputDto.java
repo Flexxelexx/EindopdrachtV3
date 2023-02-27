@@ -1,12 +1,11 @@
 package com.example.eindopdrachtbackendv1.dtos.output;
 
 import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
-import com.example.eindopdrachtbackendv1.models.Gear;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import lombok.Data;
 
 @Data
-public class UploadOutputDto {
+public class UploadGearOutputDto {
 
     public Long id;
 
@@ -26,5 +25,11 @@ public class UploadOutputDto {
 
     public FileUploadResponse file;
 
+    private Double rodLength;
 
+    private String kindOfReel;
+
+    private String kindOfLure;
+
+    private String lineLength;
 }

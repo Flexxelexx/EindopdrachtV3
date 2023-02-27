@@ -1,15 +1,17 @@
 package com.example.eindopdrachtbackendv1.controllers;
 
+import com.example.eindopdrachtbackendv1.dtos.input.GearInputDto;
+import com.example.eindopdrachtbackendv1.dtos.input.UploadGearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
+import com.example.eindopdrachtbackendv1.dtos.output.UploadGearOutputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
-import com.example.eindopdrachtbackendv1.models.FileUploadResponse;
-import com.example.eindopdrachtbackendv1.models.Upload;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
+import com.example.eindopdrachtbackendv1.services.DatabaseService;
+import com.example.eindopdrachtbackendv1.services.GearService;
 import com.example.eindopdrachtbackendv1.services.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -27,37 +29,46 @@ public class UploadController {
 
     private final UploadRepository uploadRepository;
 
-    private final PhotoController controller;
+    private final DatabaseService databaseService;
+
+    private final GearService gearService;
 
 
     @Autowired
-    public UploadController(UploadService uploadService, UploadRepository uploadRepository, PhotoController controller) {
+    public UploadController(UploadService uploadService, UploadRepository uploadRepository, DatabaseService databaseService, GearService gearService) {
         this.uploadService = uploadService;
         this.uploadRepository = uploadRepository;
-        this.controller = controller;
+        this.databaseService = databaseService;
+        this.gearService = gearService;
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<List<UploadOutputDto>> getUploads() {
+    public ResponseEntity<List<UploadGearOutputDto>> getUploads() {
 
 
-        List<UploadOutputDto> uploadDTOS = uploadService.getUploads();
+        List<UploadGearOutputDto> uploadDTOS = uploadService.getUploads();
 
         return ResponseEntity.ok().body(uploadDTOS);
     }
 
     @GetMapping(value = "/{upload}")
-    public ResponseEntity<UploadOutputDto> getUpload(@PathVariable("upload") Long id) {
+    public ResponseEntity<UploadGearOutputDto> getUpload(@PathVariable("upload") Long id) {
 
-        UploadOutputDto optionalUpload = uploadService.getUpload(id);
+        UploadGearOutputDto optionalUpload = uploadService.getUpload(id);
 
         return ResponseEntity.ok().body(optionalUpload);
     }
 
     @PostMapping()
-    public ResponseEntity<UploadInputDto> createUpload(@RequestBody UploadInputDto id) throws IOException {
+    public ResponseEntity<UploadInputDto> createUpload(@RequestBody UploadGearInputDto id) throws IOException {
 
-        String newUpload = uploadService.createUpload(id).toString();
+        GearInputDto gearDTO = new GearInputDto(id.getRodLength(), id.getKindOfReel(), id.getKindOfLure(), id.getLineLength());
+
+        UploadInputDto uploadDTO = new UploadInputDto(id.getWeightFish(), id.getLengthFish(), id.getCharsFish(), id.getSpeciesFish(), id.getLocationCaught(), id.getCityCaught(), id.getFile());
+
+        Long newGear = gearService.createGear(gearDTO);
+        String newUpload = uploadService.createUpload(uploadDTO, newGear).toString();
+
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .buildAndExpand(newUpload).toUri();
@@ -74,9 +85,9 @@ public class UploadController {
     }
 
     @PutMapping
-    public ResponseEntity<UploadOutputDto> updateUpload(@Valid @RequestBody UploadInputDto uploadInput) {
+    public ResponseEntity<UploadGearOutputDto> updateUpload(@Valid @RequestBody UploadInputDto uploadInput) {
 
-        UploadOutputDto upload = uploadService.updateUpload(uploadInput);
+        UploadGearOutputDto upload = uploadService.updateUpload(uploadInput);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .buildAndExpand(upload).toUri();
@@ -93,21 +104,13 @@ public class UploadController {
 
 
     @GetMapping(value = "/species/{speciesfish}")
-    public ResponseEntity<List<UploadOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
+    public ResponseEntity<List<UploadGearOutputDto>> getSpecies(@PathVariable("speciesfish") String speciesfish) {
 
-        List<UploadOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish.toLowerCase(Locale.ROOT));
+        List<UploadGearOutputDto> uploadDTOS = uploadService.getSpecies(speciesfish.toLowerCase(Locale.ROOT));
 
         return ResponseEntity.ok().body(uploadDTOS);
     }
 
-    @PostMapping("/{id}/photo")
-    public void assignPhotoToStudent(@PathVariable("id") Long studentNumber,
-                                     @RequestBody MultipartFile file) {
 
-        FileUploadResponse photo = controller.singleFileUpload(file);
-
-        uploadService.assignPhotoToStudent(photo.getFileName(), studentNumber);
-
-    }
 
 }

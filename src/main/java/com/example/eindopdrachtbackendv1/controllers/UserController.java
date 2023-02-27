@@ -96,13 +96,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/{id}/addgear/{gearid}")
-    public ResponseEntity<Object> addGear(@PathVariable("id") Long id, @PathVariable("gearid") Long gearid) {
-
-        userService.assignGearToUser(gearid, id);
-
-        return ResponseEntity.noContent().build();
-    }
 
     @DeleteMapping(value = "/{id}/deleteuser")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") Long username) {

@@ -1,9 +1,10 @@
-package com.example.eindopdrachtbackendv1.models;
+package com.example.eindopdrachtbackendv1.dtos;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
-@Entity
+
 public class FileUploadResponse {
 
     @Id
@@ -11,10 +12,13 @@ public class FileUploadResponse {
     private String contentType;
     private String url;
 
+
+
     public FileUploadResponse(String fileName, String contentType, String url) {
         this.fileName = fileName;
         this.contentType = contentType;
         this.url = url;
+
     }
 
     public FileUploadResponse() {
@@ -43,4 +47,5 @@ public class FileUploadResponse {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }

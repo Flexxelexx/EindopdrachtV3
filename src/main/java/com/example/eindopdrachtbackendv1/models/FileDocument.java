@@ -1,9 +1,6 @@
 package com.example.eindopdrachtbackendv1.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 public class FileDocument {
@@ -16,6 +13,13 @@ public class FileDocument {
 
     @Lob
     private byte[] docFile;
+
+    @OneToOne(mappedBy = "file")
+    Upload upload;
+
+    @OneToOne(mappedBy = "file")
+    User user;
+
 
 
     public String getFileName() {
@@ -32,5 +36,29 @@ public class FileDocument {
 
     public void setDocFile(byte[] docFile) {
         this.docFile = docFile;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Upload getUpload() {
+        return upload;
+    }
+
+    public void setUpload(Upload upload) {
+        this.upload = upload;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

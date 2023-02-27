@@ -96,12 +96,6 @@ public class UserService {
         userOutputDto.setDob(user.getDob());
 
 
-        List<Long> gearIds = new ArrayList<>();
-        for(Gear gear: user.getGears()){
-            gearIds.add(gear.getId());
-        }
-        userOutputDto.setGearIds(gearIds);
-
         return userOutputDto;
     }
 
@@ -171,16 +165,6 @@ public class UserService {
         }
     }
 
-    public void assignGearToUser(Long gearID, Long userID) {
-        Optional<User> userOptional = userRepository.findById(userID);
-        Optional<Gear> gearOptional = gearRepository.findById(gearID);
-        if (userOptional != null && gearOptional != null) {
-            User user = userOptional.get();
-            Gear gear = gearOptional.get();
-            gear.setUsers(user);
-            gearRepository.save(gear);
-        }
-    }
 
     public void deleteUser(Long username) {
         userRepository.deleteById(username);

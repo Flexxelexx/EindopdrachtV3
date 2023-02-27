@@ -1,7 +1,6 @@
 package com.example.eindopdrachtbackendv1.models;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 
 @Entity
@@ -12,31 +11,31 @@ public class Gear {
     private Long id;
 
     @Column
-    private String rodLength;
+    private Double rodLength;
 
     @Column
     private String kindOfReel;
 
     @Column
-    private String lure;
+    private String kindOfLure;
 
     @Column
-    private double line;
+    private String lineLength;
 
-    @ManyToOne
-    private User user;
+    @OneToOne(mappedBy = "gear")
+    Upload upload;
 
 
     public Gear() {
     }
 
-    public Gear(Long id, String rodLength, String kindOfReel, String lure, double line, User users) {
+    public Gear(Long id, Double rodLength, String kindOfReel, String kindOfLure, String line, User users, Upload upload) {
         this.id = id;
         this.rodLength = rodLength;
         this.kindOfReel = kindOfReel;
-        this.lure = lure;
-        this.line = line;
-        this.user = users;
+        this.kindOfLure = kindOfLure;
+        this.lineLength = line;
+        this.upload = upload;
     }
 
     public Long getId() {
@@ -47,11 +46,11 @@ public class Gear {
         this.id = id;
     }
 
-    public String getRodLength() {
+    public Double getRodLength() {
         return rodLength;
     }
 
-    public void setRodLength(String rodLength) {
+    public void setRodLength(Double rodLength) {
         this.rodLength = rodLength;
     }
 
@@ -63,27 +62,28 @@ public class Gear {
         this.kindOfReel = kindOfReel;
     }
 
-    public String getLure() {
-        return lure;
+    public String getKindOfLure() {
+        return kindOfLure;
     }
 
-    public void setLure(String lure) {
-        this.lure = lure;
+    public void setKindOfLure(String lure) {
+        this.kindOfLure = lure;
     }
 
-    public double getLine() {
-        return line;
+    public String getLineLength() {
+        return lineLength;
     }
 
-    public void setLine(double line) {
-        this.line = line;
+    public void setLineLength(String line) {
+        this.lineLength = line;
     }
 
-    public User getUsers() {
-        return user;
+    public Upload getUpload() {
+        return upload;
     }
 
-    public void setUsers(User users) {
-        this.user = users;
+    public void setUpload(Upload upload) {
+        this.upload = upload;
     }
+
 }
