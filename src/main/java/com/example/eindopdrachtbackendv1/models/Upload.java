@@ -43,7 +43,7 @@ public class Upload {
 
     private Rating rating;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     FileDocument file;
 
     @OneToOne

@@ -4,9 +4,11 @@ import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.models.Upload;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 public interface UploadRepository extends JpaRepository <Upload, Long> {
         Optional<Object> findById(UploadInputDto uploadInput);
 

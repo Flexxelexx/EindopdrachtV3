@@ -95,7 +95,11 @@ public class UserService {
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setDob(user.getDob());
 
-
+        List<Long> uploadIds = new ArrayList<>();
+        for(Upload upload : user.getUploads()){
+            uploadIds.add(upload.getId());
+        }
+        userOutputDto.setUploadIds(uploadIds);
         return userOutputDto;
     }
 
@@ -131,7 +135,7 @@ public class UserService {
         if (userInput.getPassword() != null) {
             user.setPassword(encoder.encode(userInput.getPassword()));
         }
-        if (userInput.getEmail() != null ) {
+        if (userInput.getEmail() != null) {
             user.setEmail(userInput.getEmail());
         }
         if (userInput.getDob() != null) {

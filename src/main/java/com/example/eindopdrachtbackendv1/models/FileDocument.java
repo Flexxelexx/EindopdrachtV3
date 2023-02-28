@@ -1,5 +1,7 @@
 package com.example.eindopdrachtbackendv1.models;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class FileDocument {
 
     private String fileName;
 
+    @Type(type = "org.hibernate.type.ImageType")
     @Lob
     private byte[] docFile;
 

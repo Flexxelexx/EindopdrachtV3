@@ -1,9 +1,6 @@
 package com.example.eindopdrachtbackendv1.dtos.input;
 
 import lombok.Data;
-
-import javax.management.relation.Role;
-import javax.persistence.Lob;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

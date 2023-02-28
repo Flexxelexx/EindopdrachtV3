@@ -2,7 +2,6 @@ package com.example.eindopdrachtbackendv1.dtos.output;
 
 import lombok.Data;
 
-import javax.persistence.Lob;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -27,6 +26,6 @@ public class UserOutputDto {
 
     private LocalDate dob;
 
-    private List<Long> gearIds;
+    private List <Long> uploadIds;
 
 }
