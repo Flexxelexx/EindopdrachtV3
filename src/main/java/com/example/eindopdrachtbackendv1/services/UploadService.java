@@ -97,7 +97,7 @@ public class UploadService {
         uploadGearOutputDto.setSpeciesFish(upload.getSpeciesfish());
         uploadGearOutputDto.setLocationCaught(upload.getLocationCaught());
         uploadGearOutputDto.setCityCaught(upload.getCityCaught());
-        if(upload.getFile() != null) {
+        if (upload.getFile() != null) {
             FileUploadResponse fileUploadResponse = new FileUploadResponse(
                     upload.getFile().getFileName(),
                     "Image",
@@ -106,10 +106,14 @@ public class UploadService {
             uploadGearOutputDto.setFile(fileUploadResponse);
         }
 
-      uploadGearOutputDto.setRodLength(upload.getGear().getRodLength());
+        uploadGearOutputDto.setRodLength(upload.getGear().getRodLength());
         uploadGearOutputDto.setKindOfReel(upload.getGear().getKindOfReel());
         uploadGearOutputDto.setKindOfLure(upload.getGear().getKindOfLure());
         uploadGearOutputDto.setLineLength(upload.getGear().getLineLength());
+
+        if (upload.getUsers() != null) {
+            uploadGearOutputDto.setUsername(upload.getUsers().getUsername());
+        }
 
 
         uploadGearOutputDto.setRating(upload.getRating());

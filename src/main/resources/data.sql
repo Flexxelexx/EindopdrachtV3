@@ -1,5 +1,5 @@
 insert into roles(id,rolename) values (1,'ROLE_USER'), (2,'ROLE_ADMIN');
-insert into users(id,username,password) values (1001, 'Test', 'test123');
+insert into users(id,username,password) values (1001, 'Admin', 'admin1234');
 insert into users_roles(users_id,roles_id) values (1001, 2);
 
 -- insert into fishingspots (id,city)

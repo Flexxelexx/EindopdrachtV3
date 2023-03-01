@@ -1,13 +1,10 @@
 package com.example.eindopdrachtbackendv1.models;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +48,8 @@ public class User {
     private Set<Role> roles;
     @ManyToMany
     private List<FishingSpot> fishingSpots;
-    @OneToMany
+
+    @OneToMany(mappedBy = "users")
     private List<Upload> uploads;
 
     @OneToOne
@@ -95,6 +93,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public FileDocument getFile() {
+        return file;
+    }
+
+    public void setFile(FileDocument file) {
+        this.file = file;
     }
 
     public String getPassword() {

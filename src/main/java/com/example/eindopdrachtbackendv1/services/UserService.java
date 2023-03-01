@@ -164,8 +164,8 @@ public class UserService {
         if (!userOptional.isEmpty() && !uploadOptional.isEmpty()) {
             User user = userOptional.get();
             Upload upload = uploadOptional.get();
-            user.addUpload(upload);
-            userRepository.save(user);
+            upload.setUsers(user);
+            uploadRepository.save(upload);
         }
     }
 

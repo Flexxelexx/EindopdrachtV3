@@ -52,37 +52,44 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeRequests()
 
+                // registreren en login vrij
+                .antMatchers(HttpMethod.POST, "/register/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/login/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/login/**").permitAll()
+                // auth
+                .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/auth/**").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/login/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/uploads/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/uploads/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/fishingspots").permitAll()
-                .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/single/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/download/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/photos/**").permitAll()
-
-                .antMatchers("/**").authenticated()
-
-
-                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-
-
-                .antMatchers("/admin").hasAuthority("ADMIN")
-                .antMatchers("/secret").hasAuthority("ADMIN")
-
-
-                .antMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/uploads/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/fishingspots/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/ratings/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/gears/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/locations/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/single/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/download/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers(HttpMethod.POST, "/login/**").permitAll()
+//                .antMatchers(HttpMethod.POST,"/uploads/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+//                .antMatchers(HttpMethod.GET,"/fishingspots").permitAll()
+//                .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/single/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/download/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/photos/**").permitAll()
+//
+//                .antMatchers("/**").authenticated()
+//
+//
+//                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+//
+//
+//                .antMatchers("/admin").hasAuthority("ADMIN")
+//                .antMatchers("/secret").hasAuthority("ADMIN")
+//
+//
+//                .antMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/uploads/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/fishingspots/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/ratings/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/gears/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/locations/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/single/**").hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/download/**").hasAnyAuthority("USER", "ADMIN")
 
 
                 .and()

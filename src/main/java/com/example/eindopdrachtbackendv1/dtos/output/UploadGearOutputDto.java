@@ -4,6 +4,7 @@ import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.models.Rating;
 import lombok.Data;
 
+
 @Data
 public class UploadGearOutputDto {
 
@@ -25,11 +26,15 @@ public class UploadGearOutputDto {
 
     public FileUploadResponse file;
 
-    private Double rodLength;
+    public Double rodLength;
 
-    private String kindOfReel;
+    public String kindOfReel;
 
-    private String kindOfLure;
+    public String kindOfLure;
 
-    private String lineLength;
+    public String lineLength;
+
+    public String username;
+
+    // public User username;
 }
