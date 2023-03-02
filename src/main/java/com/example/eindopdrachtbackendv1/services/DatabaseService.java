@@ -35,18 +35,6 @@ public class DatabaseService {
         return doc.findAll();
     }
 
-//    public FileDocument uploadFileDocument(MultipartFile file) throws IOException {
-//        String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-//        FileDocument fileDocument = new FileDocument();
-//        fileDocument.setFileName(name);
-//        fileDocument.setDocFile(file.getBytes());
-//
-//        doc.save(fileDocument);
-//
-//        return fileDocument;
-//
-//    }
-
     public FileDocument uploadFileDocument(String fileName, MultipartFile file) throws IOException {
         FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName(fileName);

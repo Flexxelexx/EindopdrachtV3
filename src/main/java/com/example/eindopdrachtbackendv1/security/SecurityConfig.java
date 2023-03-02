@@ -54,8 +54,10 @@ public class SecurityConfig {
 
                 // registreren en login vrij
                 .antMatchers(HttpMethod.POST, "/register/**").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/login/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/login/**").permitAll()
+
                 // auth
                 .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/auth/**").permitAll()
