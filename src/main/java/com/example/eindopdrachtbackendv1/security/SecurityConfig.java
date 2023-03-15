@@ -52,28 +52,24 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeRequests()
 
-                // registreren en login vrij
-                .antMatchers(HttpMethod.POST, "/register/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/login/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/login/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/**").authenticated()
 
-                // auth
-                .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/login/").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/login/**").permitAll()
-//                .antMatchers(HttpMethod.POST,"/uploads/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/uploads").authenticated()
+                .antMatchers(HttpMethod.GET, "/uploads").authenticated()
+
 //                .antMatchers(HttpMethod.GET,"/fishingspots").permitAll()
 //                .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
+//
 //                .antMatchers(HttpMethod.POST, "/single/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
+//
 //                .antMatchers(HttpMethod.GET, "/download/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/photos/**").permitAll()
-//
+////
 //                .antMatchers("/**").authenticated()
 //
 //

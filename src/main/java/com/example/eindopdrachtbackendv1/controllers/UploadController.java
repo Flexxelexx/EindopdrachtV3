@@ -5,10 +5,12 @@ import com.example.eindopdrachtbackendv1.dtos.input.UploadGearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadGearOutputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
+import com.example.eindopdrachtbackendv1.models.User;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.services.DatabaseService;
 import com.example.eindopdrachtbackendv1.services.GearService;
 import com.example.eindopdrachtbackendv1.services.UploadService;
+import com.example.eindopdrachtbackendv1.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +33,17 @@ public class UploadController {
 
     private final DatabaseService databaseService;
 
+    private final UserService userService;
+
     private final GearService gearService;
 
 
     @Autowired
-    public UploadController(UploadService uploadService, UploadRepository uploadRepository, DatabaseService databaseService, GearService gearService) {
+    public UploadController(UploadService uploadService, UploadRepository uploadRepository, DatabaseService databaseService, UserService userService, GearService gearService) {
         this.uploadService = uploadService;
         this.uploadRepository = uploadRepository;
         this.databaseService = databaseService;
+        this.userService = userService;
         this.gearService = gearService;
     }
 
