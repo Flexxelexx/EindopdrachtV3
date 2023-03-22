@@ -18,8 +18,6 @@ public class UploadGearInputDto {
 
     public String cityCaught;
 
-    public FileUploadResponse file;
-
     private Double rodLength;
 
     private String kindOfReel;
@@ -27,4 +25,6 @@ public class UploadGearInputDto {
     private String kindOfLure;
 
     private String lineLength;
+
+    public FileUploadResponse file;
 }

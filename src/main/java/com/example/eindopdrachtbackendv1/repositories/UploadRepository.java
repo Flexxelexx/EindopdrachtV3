@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UploadRepository extends JpaRepository <Upload, Long> {
         Optional<Object> findById(UploadInputDto uploadInput);
 
+        List<Upload> findByUsersUsername(String username);
+
         List<Upload> findBySpeciesfish (String speciesfish);
 
 

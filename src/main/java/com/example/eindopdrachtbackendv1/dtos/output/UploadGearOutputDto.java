@@ -24,8 +24,6 @@ public class UploadGearOutputDto {
 
     public Rating rating;
 
-    public FileUploadResponse file;
-
     public Double rodLength;
 
     public String kindOfReel;
@@ -36,5 +34,5 @@ public class UploadGearOutputDto {
 
     public String username;
 
-    // public User username;
+    public FileUploadResponse file;
 }

@@ -52,43 +52,47 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeRequests()
 
-
+                // create user
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**").authenticated()
 
-                .antMatchers(HttpMethod.POST, "/login/").permitAll()
+                // auth
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
 
-                .antMatchers(HttpMethod.POST,"/uploads").authenticated()
-                .antMatchers(HttpMethod.GET, "/uploads").authenticated()
+                 // users
+                .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/users/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
-//                .antMatchers(HttpMethod.GET,"/fishingspots").permitAll()
-//                .antMatchers(HttpMethod.GET,"/fishingspots/**").permitAll()
-//
-//                .antMatchers(HttpMethod.POST, "/single/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").permitAll()
-//
-//                .antMatchers(HttpMethod.GET, "/download/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/photos/**").permitAll()
-////
-//                .antMatchers("/**").authenticated()
-//
-//
-//                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-//
-//
-//                .antMatchers("/admin").hasAuthority("ADMIN")
-//                .antMatchers("/secret").hasAuthority("ADMIN")
-//
-//
-//                .antMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/uploads/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/fishingspots/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/ratings/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/gears/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/locations/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/single/**").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers("/download/**").hasAnyAuthority("USER", "ADMIN")
+                // uploads
+                .antMatchers(HttpMethod.POST, "/uploads").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/uploads").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/uploads/user/{username}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
+                // fishingspots
+                .antMatchers(HttpMethod.POST, "/fishingspots").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/fishingspots").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
+                //gears
+                .antMatchers(HttpMethod.POST, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
+                //file upload
+                .antMatchers(HttpMethod.POST, "/single/uploadDb").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/single/uploadDb").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
+                // file download
+                .antMatchers(HttpMethod.POST, "/downloadFromDB/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/downloadFromDB/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
+                // delete
+                .antMatchers(HttpMethod.DELETE, "/users").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/uploads").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/fishingspots").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
+
+                .antMatchers("/roles").hasAnyAuthority("ADMIN")
+
+                .antMatchers("/**").denyAll()
 
                 .and()
                 .addFilterBefore(new JwtRequestFilter(jwtService, userDetailsService()), UsernamePasswordAuthenticationFilter.class)

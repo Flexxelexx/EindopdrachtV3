@@ -1,4 +1,4 @@
-package com.example.eindopdrachtbackendv1.configs;
+package com.example.eindopdrachtbackendv1.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

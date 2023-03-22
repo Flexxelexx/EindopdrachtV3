@@ -13,6 +13,7 @@ public class UserInputDto {
 
     private String firstname;
 
+    @NotBlank
     private String username;
 
     @NotBlank
@@ -23,4 +24,5 @@ public class UserInputDto {
     private String email;
 
     private LocalDate dob;
+
     }

@@ -24,17 +24,6 @@ public class UploadDownloadWithDatabaseController {
         this.databaseService = databaseService;
     }
 
-//    @PostMapping("single/uploadDb")
-//    public FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-//
-//        FileDocument fileDocument = databaseService.uploadFileDocument(file);
-//        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
-//
-//        String contentType = file.getContentType();
-//
-//        return new FileUploadResponse(fileDocument.getFileName(), url, contentType );
-//    }
-
     @PostMapping("/single/uploadDb")
     public FileUploadResponse singleFileUpload(@RequestParam( value = "file") MultipartFile file ) throws IOException {
         String fileName = System.currentTimeMillis() + "-" + new Random().nextInt(1000) + "-" + file.getOriginalFilename();

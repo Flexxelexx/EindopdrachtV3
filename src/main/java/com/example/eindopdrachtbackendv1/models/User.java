@@ -1,6 +1,8 @@
 package com.example.eindopdrachtbackendv1.models;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,7 +33,7 @@ public class User {
 
     @Column
     private String firstname;
-    @Column
+    @Column(nullable = false)
     private String username;
     @Column
     @NotBlank
@@ -46,6 +48,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
     @ManyToMany
     private List<FishingSpot> fishingSpots;
 
@@ -59,7 +62,7 @@ public class User {
 
     }
 
-    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads ) {
+    public User(Long id, String firstname, String username, String password, String email, LocalDate dob, Set<Role> roles, List<FishingSpot> fishingSpots, List<Upload> uploads, FileDocument file) {
         this.id = id;
         this.firstname = firstname;
         this.username = username;
@@ -69,6 +72,7 @@ public class User {
         this.roles = roles;
         this.fishingSpots = fishingSpots;
         this.uploads = uploads;
+        this.file = file;
     }
 
     public Long getId() {
@@ -159,5 +163,5 @@ public class User {
         uploads.add(upload);
     }
 
-    
+
 }

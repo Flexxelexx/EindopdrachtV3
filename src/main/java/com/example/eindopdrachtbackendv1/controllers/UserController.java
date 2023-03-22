@@ -67,6 +67,14 @@ public class UserController {
 
     }
 
+    @PostMapping(value = "/admin")
+    public ResponseEntity<User> createAdmin(@Valid @RequestBody UserInputDto userDTO){
+        User admin = userService.createAdmin(userDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(admin.getUsername()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
     @PutMapping(value = "")
     public ResponseEntity<UserOutputDto> updateUser(@Valid @RequestBody UserInputDto userInput) {
 

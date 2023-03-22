@@ -4,14 +4,13 @@ import com.example.eindopdrachtbackendv1.dtos.input.GearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadGearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.input.UploadInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UploadGearOutputDto;
-import com.example.eindopdrachtbackendv1.dtos.output.UploadOutputDto;
-import com.example.eindopdrachtbackendv1.models.User;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.services.DatabaseService;
 import com.example.eindopdrachtbackendv1.services.GearService;
 import com.example.eindopdrachtbackendv1.services.UploadService;
 import com.example.eindopdrachtbackendv1.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -64,8 +63,15 @@ public class UploadController {
         return ResponseEntity.ok().body(optionalUpload);
     }
 
+    @GetMapping(value = "/user/{username}")
+    public ResponseEntity<List<UploadGearOutputDto>> getAllUploadsByUser(@PathVariable("username") String username) {
+        List<UploadGearOutputDto> uploadDTOS = uploadService.getAllUploadsByUser(username);
+        return ResponseEntity.ok().body(uploadDTOS);
+    }
+
     @PostMapping()
-    public ResponseEntity<UploadInputDto> createUpload(@RequestBody UploadGearInputDto id) throws IOException {
+    public ResponseEntity<String> createUpload(@RequestBody UploadGearInputDto id) throws IOException {
+
 
         GearInputDto gearDTO = new GearInputDto(id.getRodLength(), id.getKindOfReel(), id.getKindOfLure(), id.getLineLength());
 
@@ -75,10 +81,7 @@ public class UploadController {
         String newUpload = uploadService.createUpload(uploadDTO, newGear).toString();
 
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .buildAndExpand(newUpload).toUri();
-
-        return ResponseEntity.created(location).build();
+        return new ResponseEntity<>(newUpload, HttpStatus.CREATED);
     }
 
     @PostMapping("/rating/{uploadId}")

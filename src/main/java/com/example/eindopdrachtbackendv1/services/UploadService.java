@@ -68,6 +68,15 @@ public class UploadService {
         return dto;
     }
 
+    public List<UploadGearOutputDto> getAllUploadsByUser(String username) {
+        List<Upload> uploads = repository.findByUsersUsername(username);
+        List<UploadGearOutputDto> uploadDTOS = new ArrayList<>();
+        for (Upload upload : uploads) {
+            uploadDTOS.add(uploadToUploadOutputDto(upload));
+        }
+        return uploadDTOS;
+    }
+
 
     public Long createUpload(UploadInputDto uploadDTO, Long gearID) throws IOException {
         Upload upload = uploadInputDtoToUpload(uploadDTO);
@@ -85,6 +94,7 @@ public class UploadService {
         Upload newUpload = repository.save(upload);
         return newUpload.getId();
     }
+
 
     private UploadGearOutputDto uploadToUploadOutputDto(Upload upload) {
 
@@ -188,16 +198,5 @@ public class UploadService {
         repository.deleteById(id);
     }
 
-
-    public void addGearToUpload(Long gearID, Long userID) {
-        Optional<Upload> uploadOptional = repository.findById(userID);
-        Optional<Gear> gearOptional = gearRepository.findById(gearID);
-        if (uploadOptional != null && gearOptional != null) {
-            Upload upload = uploadOptional.get();
-            Gear gear = gearOptional.get();
-            gear.setUpload(upload);
-            gearRepository.save(gear);
-        }
-    }
 
 }

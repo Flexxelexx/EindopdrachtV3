@@ -83,6 +83,21 @@ public class UserService {
         return newUser;
     }
 
+    public User createAdmin(UserInputDto userDTO){
+        User newAdmin = new User();
+        newAdmin.setUsername(userDTO.getUsername());
+        newAdmin.setPassword(encoder.encode(userDTO.getPassword()));
+
+        Set<Role> userRoles = new HashSet<>();
+        Role role = roleRepository.findByRolename("ROLE_ADMIN");
+        userRoles.add(role);
+        newAdmin.setRoles(userRoles);
+
+        userRepository.save(newAdmin);
+
+        return newAdmin;
+    }
+
 
     private UserOutputDto userToUserOutputDto(User user) {
 
