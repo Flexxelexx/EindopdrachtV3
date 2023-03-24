@@ -1,7 +1,6 @@
 package com.example.eindopdrachtbackendv1.dtos.output;
 
 import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
-import com.example.eindopdrachtbackendv1.models.Rating;
 import lombok.Data;
 
 
@@ -21,8 +20,6 @@ public class UploadGearOutputDto {
     public String locationCaught;
 
     public String cityCaught;
-
-    public Rating rating;
 
     public Double rodLength;
 

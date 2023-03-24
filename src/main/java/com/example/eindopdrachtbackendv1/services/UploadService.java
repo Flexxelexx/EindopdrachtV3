@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.eindopdrachtbackendv1.models.Rating.*;
-import static com.example.eindopdrachtbackendv1.models.Rating.ZEROSTARS;
-
 @Service
 public class UploadService {
 
@@ -126,8 +123,6 @@ public class UploadService {
         }
 
 
-        uploadGearOutputDto.setRating(upload.getRating());
-
         return uploadGearOutputDto;
     }
 
@@ -144,8 +139,6 @@ public class UploadService {
         upload.setLocationCaught(uploadInputDto.getLocationCaught());
         upload.setCityCaught(uploadInputDto.getCityCaught());
 
-
-        upload.setRating(Rating.ZEROSTARS);
         return upload;
     }
 
@@ -165,33 +158,6 @@ public class UploadService {
         repository.save(upload);
 
         return uploadToUploadOutputDto(upload);
-    }
-
-
-    public void addRating(Integer uploadRating, Long uploadId) {
-        Rating ratingEnum;
-        switch (uploadRating) {
-            case 1:
-                ratingEnum = ONESTAR;
-                break;
-            case 2:
-                ratingEnum = TWOSTARS;
-                break;
-            case 3:
-                ratingEnum = THREESTARS;
-                break;
-            case 4:
-                ratingEnum = FOURSTARS;
-                break;
-            case 5:
-                ratingEnum = FIVESTARS;
-                break;
-            default:
-                ratingEnum = ZEROSTARS;
-        }
-        Upload upload = repository.findById(uploadId).get();
-        upload.setRating(ratingEnum);
-        repository.save(upload);
     }
 
     public void deleteUpload(Long id) {

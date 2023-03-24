@@ -84,14 +84,6 @@ public class UploadController {
         return new ResponseEntity<>(newUpload, HttpStatus.CREATED);
     }
 
-    @PostMapping("/rating/{uploadId}")
-    public ResponseEntity<String> addRating(@PathVariable Long uploadId, @RequestBody Integer rating) {
-
-        uploadService.addRating(rating, uploadId);
-        return ResponseEntity.ok("Rating has been given!");
-
-    }
-
     @PutMapping
     public ResponseEntity<UploadGearOutputDto> updateUpload(@Valid @RequestBody UploadInputDto uploadInput) {
 

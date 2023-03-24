@@ -41,8 +41,6 @@ public class Upload {
     @ManyToOne
     private User users;
 
-    private Rating rating;
-
     @OneToOne(fetch = FetchType.LAZY)
     FileDocument file;
 
@@ -54,14 +52,13 @@ public class Upload {
 
     }
 
-    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, User users, Rating rating, String locationCaught, String cityCaught, Gear gear) {
+    public Upload(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesfish, User users, String locationCaught, String cityCaught, Gear gear) {
         this.id = id;
         this.weightFish = weightFish;
         this.lengthFish = lengthFish;
         this.charsFish = charsFish;
         this.speciesfish = speciesfish;
         this.users = users;
-        this.rating = rating;
         this.locationCaught = locationCaught;
         this.cityCaught = cityCaught;
         this.gear = gear;
@@ -113,14 +110,6 @@ public class Upload {
 
     public void setUsers(User users) {
         this.users = users;
-    }
-
-    public Rating getRating() {
-        return rating;
-    }
-
-    public void setRating(Rating rating) {
-        this.rating = rating;
     }
 
     public String getLocationCaught() {

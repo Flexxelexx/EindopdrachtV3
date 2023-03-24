@@ -1,5 +1,7 @@
 package com.example.eindopdrachtbackendv1.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Role {
     @Column(unique = true)
     private String rolename;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 

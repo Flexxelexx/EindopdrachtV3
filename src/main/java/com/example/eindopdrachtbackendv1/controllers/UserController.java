@@ -7,11 +7,9 @@ import com.example.eindopdrachtbackendv1.repositories.UserRepository;
 import com.example.eindopdrachtbackendv1.services.GearService;
 import com.example.eindopdrachtbackendv1.services.UserService;
 import com.example.eindopdrachtbackendv1.models.User;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -67,7 +65,7 @@ public class UserController {
 
     }
 
-    @PostMapping(value = "/admin")
+    @PostMapping(value = "/createadmin")
     public ResponseEntity<User> createAdmin(@Valid @RequestBody UserInputDto userDTO){
         User admin = userService.createAdmin(userDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

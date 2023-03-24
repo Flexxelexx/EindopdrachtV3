@@ -1,7 +1,9 @@
 package com.example.eindopdrachtbackendv1.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -43,9 +45,12 @@ public class User {
     @Email
     private String email;
     @Column
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dob;
 
+    @Column
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 

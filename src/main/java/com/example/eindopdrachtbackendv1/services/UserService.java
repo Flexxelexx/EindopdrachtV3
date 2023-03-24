@@ -1,6 +1,5 @@
 package com.example.eindopdrachtbackendv1.services;
 
-import com.example.eindopdrachtbackendv1.dtos.RoleDTO;
 import com.example.eindopdrachtbackendv1.dtos.input.UserInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.exceptions.RecordNotFoundException;
@@ -109,6 +108,13 @@ public class UserService {
         userOutputDto.setPassword(encoder.encode(user.getPassword()));
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setDob(user.getDob());
+
+        Set<String> stringSet = new HashSet<>();
+        for (Role r : user.getRoles()) {
+            stringSet.add(r.getRolename());
+        }
+
+        userOutputDto.setRole(stringSet);
 
         List<Long> uploadIds = new ArrayList<>();
         for(Upload upload : user.getUploads()){
