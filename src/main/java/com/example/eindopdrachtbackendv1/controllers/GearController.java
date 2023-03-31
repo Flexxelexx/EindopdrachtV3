@@ -46,7 +46,7 @@ public class GearController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping
+    @PutMapping("")
     public ResponseEntity<GearOutputDto> updateGear(@Valid @RequestBody GearInputDto gearInput) {
 
         GearOutputDto gear = gearService.updateGear(gearInput);

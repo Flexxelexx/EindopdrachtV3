@@ -33,17 +33,14 @@ public class FishingSpot {
 
 
 
-
     public FishingSpot() {
 
     }
 
-    public FishingSpot(Long id, String spotLocation, String city, String region, Collection<User> users) {
-        this.id = id;
-        this.spotLocation = spotLocation;
-        this.city = city;
-        this.region = region;
-        this.users = users;
+    public FishingSpot(long l, String spot1, String city1, String region1) {
+    }
+
+    public FishingSpot(Long aLong, String spot3, String city3, String region3) {
     }
 
     public Long getId() {

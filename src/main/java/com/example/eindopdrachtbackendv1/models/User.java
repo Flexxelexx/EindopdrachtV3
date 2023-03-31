@@ -80,6 +80,9 @@ public class User {
         this.file = file;
     }
 
+    public User(long l, String testuser, String s, String password) {
+    }
+
     public Long getId() {
         return id;
     }

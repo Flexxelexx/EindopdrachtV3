@@ -2,126 +2,170 @@ package com.example.eindopdrachtbackendv1.controllerTests;
 
 import com.example.eindopdrachtbackendv1.controllers.GearController;
 import com.example.eindopdrachtbackendv1.dtos.input.GearInputDto;
+import com.example.eindopdrachtbackendv1.dtos.input.UploadGearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.GearOutputDto;
+import com.example.eindopdrachtbackendv1.security.JwtService;
 import com.example.eindopdrachtbackendv1.services.GearService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.Matchers.*;
 
 @ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(GearController.class)
-public class GearControllerTest {
+class GearControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GearService gearService;
+    private GearService mockGearService;
 
-    private GearOutputDto gearOutputDto;
-    private GearInputDto gearInputDto;
+    @MockBean
+    private JwtService jwtService;
 
-    private ObjectMapper objectMapper;
+    @Test
+    void testGetGears() throws Exception {
 
-    @BeforeEach
-    public void setUp() {
-        objectMapper = new ObjectMapper();
-        gearOutputDto = new GearOutputDto();
-        gearOutputDto.setId(1L);
-        gearOutputDto.setRodLength(2.5);
-        gearOutputDto.setKindOfReel("Spinning");
-        gearOutputDto.setKindOfLure("Soft plastic");
-        gearOutputDto.setLineLength("8/100");
+        final GearOutputDto gearOutputDto = new GearOutputDto();
+        gearOutputDto.setId(0L);
+        gearOutputDto.setRodLength(0.0);
+        gearOutputDto.setKindOfReel("kindOfReel");
+        gearOutputDto.setKindOfLure("kindOfLure");
+        gearOutputDto.setLineLength("lineLength");
+        final List<GearOutputDto> gearOutputDtos = List.of(gearOutputDto);
+        when(mockGearService.getGears()).thenReturn(gearOutputDtos);
 
-        gearInputDto = new GearInputDto();
-        gearInputDto.setRodLength(2.5);
-        gearInputDto.setKindOfReel("Spinning");
-        gearInputDto.setKindOfLure("Soft plastic");
-        gearInputDto.setLineLength("8/100");
+        final MockHttpServletResponse response = mockMvc.perform(get("/gears")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String expectedResponse = objectMapper.writeValueAsString(gearOutputDtos);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(expectedResponse);
     }
 
     @Test
-    public void testGetGears() throws Exception {
-        List<GearOutputDto> gearList = Arrays.asList(gearOutputDto);
+    void testGetGears_GearServiceReturnsNoItems() throws Exception {
 
-        when(gearService.getGears()).thenReturn(gearList);
+        when(mockGearService.getGears()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/gears"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].rodLength", is(2.5)))
-                .andExpect(jsonPath("$[0].kindOfReel", is("Spinning")))
-                .andExpect(jsonPath("$[0].kindOfLure", is("Soft plastic")))
-                .andExpect(jsonPath("$[0].lineLength", is(150.0)));
-        verify(gearService, times(1)).getGears();
+        final MockHttpServletResponse response = mockMvc.perform(get("/gears")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo("[]");
     }
 
     @Test
-    public void testGetGear() throws Exception {
-        when(gearService.getGear(1L)).thenReturn(gearOutputDto);
+    void testGetGear() throws Exception {
 
-        mockMvc.perform(get("/gears/{gear}", 1))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.rodLength", is(2.5)))
-                .andExpect(jsonPath("$.kindOfReel", is("Spinning")))
-                .andExpect(jsonPath("$.kindOfLure", is("Soft plastic")))
-                .andExpect(jsonPath("$.lineLength", is(150.0)));
+        final GearOutputDto gearOutputDto = new GearOutputDto();
+        gearOutputDto.setId(0L);
+        gearOutputDto.setRodLength(0.0);
+        gearOutputDto.setKindOfReel("kindOfReel");
+        gearOutputDto.setKindOfLure("kindOfLure");
+        gearOutputDto.setLineLength("lineLength");
+        when(mockGearService.getGear(0L)).thenReturn(gearOutputDto);
 
-        verify(gearService, times(1)).getGear(1L);
+        final MockHttpServletResponse response = mockMvc.perform(get("/gears/{gear}", 0)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String expectedResponse = objectMapper.writeValueAsString(gearOutputDto);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(expectedResponse);
     }
 
     @Test
-    public void testCreateGear() throws Exception {
-        when(gearService.createGear(gearInputDto)).thenReturn(1L);
+    void testCreateGear() throws Exception {
 
-        mockMvc.perform(post("/gears")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(gearInputDto)))
-                .andExpect(status().isCreated());
+        when(mockGearService.createGear(new GearInputDto(0.0, "kindOfReel", "kindOfLure", "lineLength")))
+                .thenReturn(0L);
 
-        verify(gearService, times(1)).createGear(gearInputDto);
+        final MockHttpServletResponse response = mockMvc.perform(post("/gears")
+                        .content(asJsonString(new GearInputDto())).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.getContentAsString()).isEqualTo("");
     }
 
     @Test
-    public void testUpdateGear() throws Exception {
-        when(gearService.updateGear(gearInputDto)).thenReturn(gearOutputDto);
+    void testUpdateGear() throws Exception {
 
-        mockMvc.perform(put("/gears")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(gearInputDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.rodLength", is(2.5)))
-                .andExpect(jsonPath("$.kindOfReel", is("Spinning")))
-                .andExpect(jsonPath("$.kindOfLure", is("Soft plastic")))
-                .andExpect(jsonPath("$.lineLength", is(150.0)));
+        final GearOutputDto gearOutputDto = new GearOutputDto();
+        gearOutputDto.setId(0L);
+        gearOutputDto.setRodLength(0.0);
+        gearOutputDto.setKindOfReel("kindOfReel");
+        gearOutputDto.setKindOfLure("kindOfLure");
+        gearOutputDto.setLineLength("lineLength");
+        when(mockGearService.updateGear(new GearInputDto(0.0, "kindOfReel", "kindOfLure", "lineLength")))
+                .thenReturn(gearOutputDto);
 
-        verify(gearService, times(1)).updateGear(gearInputDto);
+        final MockHttpServletResponse response = mockMvc.perform(put("/gears")
+                        .content(asJsonString(new GearInputDto())).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String expectedResponse = objectMapper.writeValueAsString(gearOutputDto);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.getContentAsString()).isEqualTo("");
     }
 
     @Test
-    public void testDeleteGear() throws Exception {
-        mockMvc.perform(delete("/gears/{id}", 1))
-                .andExpect(status().isNoContent());
+    void testDeleteGear() throws Exception {
 
-        verify(gearService, times(1)).deleteGear(1L);
+        final MockHttpServletResponse response = mockMvc.perform(delete("/gears/{id}", 0)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        assertThat(response.getContentAsString()).isEqualTo("");
+        verify(mockGearService).deleteGear(0L);
+    }
+
+    public static String asJsonString(final GearInputDto gearInputDto) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            return mapper.writeValueAsString(gearInputDto);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

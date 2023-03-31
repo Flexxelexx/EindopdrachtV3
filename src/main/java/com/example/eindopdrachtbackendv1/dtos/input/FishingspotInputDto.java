@@ -12,4 +12,7 @@ public class FishingspotInputDto {
     private String city;
 
     private String region;
+
+    public FishingspotInputDto(Long l, String spot1, String city1, String description1) {
+    }
 }

@@ -1,8 +1,7 @@
 package com.example.eindopdrachtbackendv1.dtos;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
 
 
 public class FileUploadResponse {

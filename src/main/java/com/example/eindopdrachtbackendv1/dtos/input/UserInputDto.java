@@ -1,6 +1,8 @@
 package com.example.eindopdrachtbackendv1.dtos.input;
 
 import lombok.Data;
+
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -9,6 +11,7 @@ import java.time.LocalDate;
 @Data
 public class UserInputDto {
 
+    @Id
     private Long id;
 
     private String firstname;

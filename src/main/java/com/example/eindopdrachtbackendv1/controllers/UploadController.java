@@ -28,21 +28,12 @@ public class UploadController {
 
     private final UploadService uploadService;
 
-    private final UploadRepository uploadRepository;
-
-    private final DatabaseService databaseService;
-
-    private final UserService userService;
-
     private final GearService gearService;
 
 
     @Autowired
-    public UploadController(UploadService uploadService, UploadRepository uploadRepository, DatabaseService databaseService, UserService userService, GearService gearService) {
+    public UploadController(UploadService uploadService,GearService gearService) {
         this.uploadService = uploadService;
-        this.uploadRepository = uploadRepository;
-        this.databaseService = databaseService;
-        this.userService = userService;
         this.gearService = gearService;
     }
 

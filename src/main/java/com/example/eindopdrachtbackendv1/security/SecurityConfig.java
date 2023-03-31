@@ -2,6 +2,7 @@ package com.example.eindopdrachtbackendv1.security;
 
 import com.example.eindopdrachtbackendv1.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -69,6 +71,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.POST, "/users/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.POST, "/users/{id}/upload/{uploadid}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/users/{id}/addfishingspot/{fishingspotid}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
                 //file upload
                 .antMatchers(HttpMethod.POST, "/single/uploadDb").permitAll()
@@ -89,12 +92,16 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
+                // update
+                .antMatchers(HttpMethod.PUT, "/users/{username}").permitAll()
+                .antMatchers(HttpMethod.PUT, "/gears/{id}").permitAll()
+
                 // delete
-                .antMatchers(HttpMethod.DELETE, "/users").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-//                .antMatchers(HttpMethod.DELETE, "/uploads/{id}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/users/{id}/deleteuser").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/uploads/{id}").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/fishingspots").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/gears/{id}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
 
                 .antMatchers("/roles").hasAnyAuthority("ADMIN")

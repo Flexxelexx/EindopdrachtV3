@@ -2,19 +2,18 @@ package com.example.eindopdrachtbackendv1.controllers;
 
 import com.example.eindopdrachtbackendv1.dtos.input.UserInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UserOutputDto;
-import com.example.eindopdrachtbackendv1.repositories.RoleRepository;
-import com.example.eindopdrachtbackendv1.repositories.UserRepository;
-import com.example.eindopdrachtbackendv1.services.GearService;
 import com.example.eindopdrachtbackendv1.services.UserService;
 import com.example.eindopdrachtbackendv1.models.User;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -22,20 +21,9 @@ public class UserController {
 
     private final UserService userService;
 
-    private final GearService gearService;
 
-    private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
-
-    private final PasswordEncoder encoder;
-
-    public UserController(UserService userService, GearService gearService, RoleRepository roleRepository, PasswordEncoder encoder, UserRepository userRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.gearService = gearService;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -62,7 +50,6 @@ public class UserController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(user.getUsername()).toUri();
         return ResponseEntity.created(location).build();
-
     }
 
     @PostMapping(value = "/createadmin")
@@ -73,7 +60,8 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "")
+
+    @PutMapping(value = "/{username}")
     public ResponseEntity<UserOutputDto> updateUser(@Valid @RequestBody UserInputDto userInput) {
 
         UserOutputDto user = userService.updateUser(userInput);
@@ -86,9 +74,9 @@ public class UserController {
 
 
     @PostMapping(value = "/{id}/upload/{uploadid}")
-    public ResponseEntity<Object> addUpload(@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadid) {
+    public ResponseEntity<Object> addUpload(@PathVariable("id") Long id, @PathVariable("uploadid") Long uploadID) {
 
-        userService.addUpload(uploadid, id);
+        userService.addUpload(uploadID, id);
 
         return ResponseEntity.noContent().build();
     }
@@ -106,7 +94,7 @@ public class UserController {
     @DeleteMapping(value = "/{id}/deleteuser")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") Long username) {
         userService.deleteUser(username);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 

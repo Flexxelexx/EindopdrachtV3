@@ -65,8 +65,8 @@ public class GearService {
         gear.setId(gearInputDto.getId());
         gear.setRodLength(gearInputDto.getRodLength());
         gear.setKindOfReel(gearInputDto.getKindOfReel());
-        gear.setKindOfLure(gearInputDto.getLure());
-        gear.setLineLength(gearInputDto.getLine());
+        gear.setKindOfLure(gearInputDto.getKindOfLure());
+        gear.setLineLength(gearInputDto.getLineLength());
 
         return gear;
     }

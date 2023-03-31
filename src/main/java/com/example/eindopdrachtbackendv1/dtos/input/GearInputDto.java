@@ -13,14 +13,25 @@ public class GearInputDto {
 
     private String kindOfReel;
 
-    private String lure;
+    private String kindOfLure;
 
-    private String line;
+    private String lineLength;
 
-    public GearInputDto(Double rodLength, String kindOfReel, String lure, String line) {
+    public GearInputDto(Long id, Double rodLength, String kindOfReel, String kindOfLure, String lineLength) {
+        this.id = id;
         this.rodLength = rodLength;
         this.kindOfReel = kindOfReel;
-        this.lure = lure;
-        this.line = line;
+        this.kindOfLure = kindOfLure;
+        this.lineLength = lineLength;
+    }
+
+    public GearInputDto() {
+    }
+
+    public GearInputDto(Double rodLength, String kindOfReel, String kindOfLure, String lineLength) {
+        this.rodLength = rodLength;
+        this.kindOfReel = kindOfReel;
+        this.kindOfLure = kindOfLure;
+        this.lineLength = lineLength;
     }
 }

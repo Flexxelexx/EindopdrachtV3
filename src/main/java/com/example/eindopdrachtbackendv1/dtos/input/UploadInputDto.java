@@ -33,4 +33,19 @@ public class UploadInputDto {
         this.cityCaught = cityCaught;
         this.file = file;
     }
+
+    public UploadInputDto() {
+
+    }
+
+    public UploadInputDto(Long id, Double weightFish, Double lengthFish, String charsFish, String speciesFish, String locationCaught, String cityCaught, FileUploadResponse file) {
+        this.id = id;
+        this.weightFish = weightFish;
+        this.lengthFish = lengthFish;
+        this.charsFish = charsFish;
+        this.speciesFish = speciesFish;
+        this.locationCaught = locationCaught;
+        this.cityCaught = cityCaught;
+        this.file = file;
+    }
 }

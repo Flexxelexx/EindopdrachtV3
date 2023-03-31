@@ -12,4 +12,11 @@ public class FishingspotOutputDto {
     private String city;
 
     private String region;
+
+    public FishingspotOutputDto(String spot1, String city1, String description1) {
+    }
+
+    public FishingspotOutputDto() {
+
+    }
 }
