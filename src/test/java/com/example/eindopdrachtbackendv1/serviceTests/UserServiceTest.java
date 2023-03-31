@@ -8,14 +8,12 @@ import com.example.eindopdrachtbackendv1.repositories.FishingSpotRepository;
 import com.example.eindopdrachtbackendv1.repositories.RoleRepository;
 import com.example.eindopdrachtbackendv1.repositories.UploadRepository;
 import com.example.eindopdrachtbackendv1.repositories.UserRepository;
-import com.example.eindopdrachtbackendv1.security.JwtService;
 import com.example.eindopdrachtbackendv1.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -56,7 +54,7 @@ class UserServiceTest {
 
     @Test
     void testGetUsers() {
-        // Setup
+
         final UserOutputDto userOutputDto = new UserOutputDto();
         userOutputDto.setId(0L);
         userOutputDto.setFirstname("firstname");
@@ -112,7 +110,7 @@ class UserServiceTest {
 
     @Test
     void testGetUser() {
-        // Setup
+
         final UserOutputDto expectedResult = new UserOutputDto();
         expectedResult.setId(0L);
         expectedResult.setFirstname("firstname");
@@ -123,7 +121,6 @@ class UserServiceTest {
         expectedResult.setUploadIds(List.of(0L));
         expectedResult.setRole(Set.of("rolename"));
 
-        // Configure UserRepository.findByUsername(...).
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());

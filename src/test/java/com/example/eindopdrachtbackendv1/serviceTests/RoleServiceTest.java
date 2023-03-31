@@ -33,8 +33,7 @@ class RoleServiceTest {
 
     @Test
     void testGetRole() {
-        // Setup
-        // Configure UserRepository.findByUsername(...).
+
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());
@@ -61,18 +60,14 @@ class RoleServiceTest {
                         fileDocument));
         when(mockUserRepos.findByUsername("username")).thenReturn(userOptional);
 
-        // Run the test
         final Set<Role> result = roleServiceUnderTest.GetRole("username");
 
-        // Verify the results
     }
 
     @Test
     void testGetRole_UserRepositoryReturnsAbsent() {
-        // Setup
         when(mockUserRepos.findByUsername("username")).thenReturn(Optional.empty());
 
-        // Run the test
         assertThatThrownBy(() -> roleServiceUnderTest.GetRole("username")).isInstanceOf(NoSuchElementException.class);
     }
 }

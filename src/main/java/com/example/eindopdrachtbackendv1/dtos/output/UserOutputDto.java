@@ -1,6 +1,5 @@
 package com.example.eindopdrachtbackendv1.dtos.output;
 
-import com.example.eindopdrachtbackendv1.models.Role;
 import lombok.Data;
 
 import javax.validation.constraints.Email;

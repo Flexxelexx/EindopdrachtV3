@@ -3,7 +3,6 @@ package com.example.eindopdrachtbackendv1.controllers;
 import com.example.eindopdrachtbackendv1.dtos.FileUploadResponse;
 import com.example.eindopdrachtbackendv1.services.DatabaseService;
 import com.example.eindopdrachtbackendv1.models.FileDocument;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

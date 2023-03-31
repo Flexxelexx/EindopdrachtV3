@@ -21,7 +21,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +39,7 @@ class GearServiceTest {
 
     @Test
     void testGetGears() {
-        // Setup
+
         final GearOutputDto gearOutputDto = new GearOutputDto();
         gearOutputDto.setId(0L);
         gearOutputDto.setRodLength(0.0);
@@ -49,7 +48,6 @@ class GearServiceTest {
         gearOutputDto.setLineLength("line");
         final List<GearOutputDto> expectedResult = List.of(gearOutputDto);
 
-        // Configure GearRepository.findAll(...).
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());
@@ -97,28 +95,24 @@ class GearServiceTest {
                                 List.of(), fileDocument1), "locationCaught", "cityCaught", null)));
         when(mockGearRepository.findAll()).thenReturn(gears);
 
-        // Run the test
         final List<GearOutputDto> result = gearServiceUnderTest.getGears();
 
-        // Verify the results
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     void testGetGears_GearRepositoryReturnsNoItems() {
-        // Setup
+
         when(mockGearRepository.findAll()).thenReturn(Collections.emptyList());
 
-        // Run the test
         final List<GearOutputDto> result = gearServiceUnderTest.getGears();
 
-        // Verify the results
         assertThat(result).isEqualTo(Collections.emptyList());
     }
 
     @Test
     void testGetGear() {
-        // Setup
+
         final GearOutputDto expectedResult = new GearOutputDto();
         expectedResult.setId(0L);
         expectedResult.setRodLength(0.0);
@@ -126,7 +120,6 @@ class GearServiceTest {
         expectedResult.setKindOfLure("kindOfLure");
         expectedResult.setLineLength("line");
 
-        // Configure GearRepository.findById(...).
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());
@@ -174,28 +167,24 @@ class GearServiceTest {
                                 List.of(), fileDocument1), "locationCaught", "cityCaught", null)));
         when(mockGearRepository.findById(0L)).thenReturn(gearOptional);
 
-        // Run the test
         final GearOutputDto result = gearServiceUnderTest.getGear(0L);
 
-        // Verify the results
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     void testGetGear_GearRepositoryReturnsAbsent() {
-        // Setup
+
         when(mockGearRepository.findById(0L)).thenReturn(Optional.empty());
 
-        // Run the test
         assertThatThrownBy(() -> gearServiceUnderTest.getGear(0L)).isInstanceOf(RecordNotFoundException.class);
     }
 
     @Test
     void testCreateGear() {
-        // Setup
+
         final GearInputDto gearDTO = new GearInputDto(0.0, "kindOfReel", "kindOfLure", "line");
 
-        // Configure GearRepository.save(...).
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());
@@ -243,16 +232,14 @@ class GearServiceTest {
                                 List.of(), fileDocument1), "locationCaught", "cityCaught", null));
         when(mockGearRepository.save(any(Gear.class))).thenReturn(gear);
 
-        // Run the test
         final Long result = gearServiceUnderTest.createGear(gearDTO);
 
-        // Verify the results
         assertThat(result).isEqualTo(0L);
     }
 
     @Test
     void testUpdateGear() {
-        // Setup
+
         final GearInputDto gearInput = new GearInputDto(1L,0.0, "kindOfReel", "kindOfLure", "line");
         final GearOutputDto expectedResult = new GearOutputDto();
         expectedResult.setId(0L);
@@ -261,7 +248,6 @@ class GearServiceTest {
         expectedResult.setKindOfLure("kindOfLure");
         expectedResult.setLineLength("line");
 
-        // Configure GearRepository.findById(...).
         final FileDocument fileDocument = new FileDocument();
         fileDocument.setFileName("fileName");
         fileDocument.setDocFile("content".getBytes());
@@ -308,53 +294,6 @@ class GearServiceTest {
                                 Set.of(new Role("rolename")), List.of(new FishingSpot(0L, "spot1", "city1", "region1")),
                                 List.of(), fileDocument1), "locationCaught", "cityCaught", null)));
         when(mockGearRepository.findById(any(Long.class))).thenReturn(gearOptional);
-
-        final FileDocument fileDocument2 = new FileDocument();
-        fileDocument2.setFileName("fileName");
-        fileDocument2.setDocFile("content".getBytes());
-        fileDocument2.setId(0L);
-        final Upload upload2 = new Upload();
-        upload2.setId(0L);
-        upload2.setWeightFish(0.0);
-        upload2.setLengthFish(0.0);
-        upload2.setCharsFish("charsFish");
-        upload2.setSpeciesfish("speciesfish");
-        final User users2 = new User();
-        users2.setId(0L);
-        users2.setFirstname("firstname");
-        users2.setUsername("username");
-        users2.setPassword("password");
-        users2.setEmail("email");
-        upload2.setUsers(users2);
-        fileDocument2.setUpload(upload2);
-        final FileDocument fileDocument3 = new FileDocument();
-        fileDocument3.setFileName("fileName");
-        fileDocument3.setDocFile("content".getBytes());
-        fileDocument3.setId(0L);
-        final Upload upload3 = new Upload();
-        upload3.setId(0L);
-        upload3.setWeightFish(0.0);
-        upload3.setLengthFish(0.0);
-        upload3.setCharsFish("charsFish");
-        upload3.setSpeciesfish("speciesfish");
-        final User users3 = new User();
-        users3.setId(0L);
-        users3.setFirstname("firstname");
-        users3.setUsername("username");
-        users3.setPassword("password");
-        users3.setEmail("email");
-        upload3.setUsers(users3);
-        fileDocument3.setUpload(upload3);
-        final Gear gear = new Gear(0L, 0.0, "kindOfReel", "kindOfLure", "line",
-                new User(0L, "firstname", "username", "password", "email", LocalDate.of(2020, 1, 1),
-                        Set.of(new Role("rolename")), List.of(new FishingSpot(0L, "spot1", "city1", "region1")),
-                        List.of(new Upload(0L, 0.0, 0.0, "charsFish", "speciesfish", null, "locationCaught",
-                                "cityCaught", null)), fileDocument2),
-                new Upload(0L, 0.0, 0.0, "charsFish", "speciesfish",
-                        new User(0L, "firstname", "username", "password", "email", LocalDate.of(2020, 1, 1),
-                                Set.of(new Role("rolename")), List.of(new FishingSpot(0L, "spot1", "city1", "region1")),
-                                List.of(), fileDocument3), "locationCaught", "cityCaught", null));
-        when(mockGearRepository.save(any(Gear.class))).thenReturn(gear);
 
         final GearOutputDto result = gearServiceUnderTest.updateGear(gearInput);
 

@@ -3,7 +3,6 @@ package com.example.eindopdrachtbackendv1.controllerTests;
 
 import com.example.eindopdrachtbackendv1.controllers.UserController;
 import com.example.eindopdrachtbackendv1.dtos.input.UserInputDto;
-import com.example.eindopdrachtbackendv1.dtos.output.UploadGearOutputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.models.*;
 

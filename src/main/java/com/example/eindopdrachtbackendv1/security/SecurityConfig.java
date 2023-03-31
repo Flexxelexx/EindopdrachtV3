@@ -98,7 +98,6 @@ public class SecurityConfig {
 
                 // delete
                 .antMatchers(HttpMethod.DELETE, "/users/{id}/deleteuser").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/uploads/{id}").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/fishingspots").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/gears").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/gears/{id}").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")

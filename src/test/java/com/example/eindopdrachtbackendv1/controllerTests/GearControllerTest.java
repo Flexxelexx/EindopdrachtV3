@@ -2,7 +2,6 @@ package com.example.eindopdrachtbackendv1.controllerTests;
 
 import com.example.eindopdrachtbackendv1.controllers.GearController;
 import com.example.eindopdrachtbackendv1.dtos.input.GearInputDto;
-import com.example.eindopdrachtbackendv1.dtos.input.UploadGearInputDto;
 import com.example.eindopdrachtbackendv1.dtos.output.GearOutputDto;
 import com.example.eindopdrachtbackendv1.security.JwtService;
 import com.example.eindopdrachtbackendv1.services.GearService;
@@ -25,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

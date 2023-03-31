@@ -5,15 +5,12 @@ import com.example.eindopdrachtbackendv1.dtos.output.UserOutputDto;
 import com.example.eindopdrachtbackendv1.services.UserService;
 import com.example.eindopdrachtbackendv1.models.User;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")

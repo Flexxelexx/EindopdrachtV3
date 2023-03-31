@@ -43,7 +43,7 @@ public class UploadService {
 
     public List<UploadGearOutputDto> getSpecies(String speciesfish) {
         if (speciesfish == null) {
-            throw new IllegalArgumentException("speciesfish cannot be null");
+            throw new IllegalArgumentException("Cannot be null");
         }
         List<UploadGearOutputDto> collection = new ArrayList<>();
         List<Upload> list = repository.findBySpeciesfish(speciesfish);
