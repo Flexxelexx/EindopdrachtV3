@@ -48,7 +48,7 @@ public class FishingSpotController {
        return ResponseEntity.created(location).build();
    }
 
-   @PostMapping
+   @PutMapping
     public ResponseEntity<FishingspotOutputDto> updateFishingspot (@Valid @RequestBody FishingspotInputDto userInput) {
 
        FishingspotOutputDto fishingspot = fishingSpotService.updateFishingspot(userInput);
